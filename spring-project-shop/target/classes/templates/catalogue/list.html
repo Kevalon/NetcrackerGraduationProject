@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Catalogue</title>
+</head>
+<body>
+    <h2>Available items</h2>
+    <div th:each="line : ${json}">
+        <p th:text="${line}">
+            <span style="white-space: pre-line"></span>
+        </p>
+    </div>
+</body>
+</html>
