@@ -4,6 +4,7 @@ import com.netcracker.application.service.ProductService;
 import com.netcracker.application.service.model.entity.Product;
 import com.netcracker.application.service.model.parser.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ public class CatalogueController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getProduct(@PathVariable BigInteger id, ModelMap model) {
         Product product = productService.getById(id);
         String json = JsonParser.parse(product);
@@ -41,12 +43,14 @@ public class CatalogueController {
     }
 
     @GetMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addProduct(ModelMap model) {
         model.addAttribute("product", new Product());
         return "catalogue/add";
     }
 
     @GetMapping("/{id}/edit")
+    @PreAuthorize("hasRole('ADMIN')")
     public String edit(@PathVariable BigInteger id, ModelMap modelMap) {
         Product product = productService.getById(id);
         modelMap.addAttribute("product", product);
@@ -54,12 +58,14 @@ public class CatalogueController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addProduct(Product product) {
         productService.addProduct(product);
         return "redirect:/catalogue";
     }
 
     @PostMapping("/{id}/delete")
+    @PreAuthorize("hasRole('ADMIN')")
     public String delete(@PathVariable BigInteger id) {
         productService.deleteProduct(id);
         return "redirect:/catalogue";
