@@ -1,4 +1,4 @@
-package com.netcracker.application.config;
+package com.netcracker.application.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

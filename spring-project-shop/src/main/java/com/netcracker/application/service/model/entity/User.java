@@ -1,39 +1,29 @@
 package com.netcracker.application.service.model.entity;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigInteger;
 import java.util.Collection;
-import java.util.List;
 
+@Table("User_Details")
+@Data
 public class User implements UserDetails {
-
-    private final List<? extends GrantedAuthority> grantedAuthorities;
-    private final String password;
-    private final String username;
-    private final boolean isAccountNonExpired;
-    private final boolean isAccountNonLocked;
-    private final boolean isCredentialsNonExpired;
-    private final boolean isEnabled;
-
-    public User(List<? extends GrantedAuthority> grantedAuthorities,
-                String password, String username,
-                boolean isAccountNonExpired,
-                boolean isAccountNonLocked,
-                boolean isCredentialsNonExpired,
-                boolean isEnabled) {
-        this.grantedAuthorities = grantedAuthorities;
-        this.password = password;
-        this.username = username;
-        this.isAccountNonExpired = isAccountNonExpired;
-        this.isAccountNonLocked = isAccountNonLocked;
-        this.isCredentialsNonExpired = isCredentialsNonExpired;
-        this.isEnabled = isEnabled;
-    }
+    @Id
+    private BigInteger id;
+    @Column("username")
+    private String name;
+    @Column("password")
+    private String password;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return grantedAuthorities;
+        return roles;
     }
 
     @Override
@@ -43,26 +33,26 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return name;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return isAccountNonExpired;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpired;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return true;
     }
 }
