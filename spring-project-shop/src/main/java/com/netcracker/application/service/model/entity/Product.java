@@ -3,28 +3,31 @@ package com.netcracker.application.service.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
 
+import javax.persistence.*;
 import java.math.BigInteger;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
+@Entity
+@Table(name = "Product")
 public class Product {
+
     @Id
-    @Column("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private BigInteger id;
-    @Column("name")
+    @Column(name = "name")
     private String name;
-    @Column("maker_id")
-    private BigInteger makerId;
-    @Column("amount_in_shop")
+    @Column(name = "maker_id")
+    private Integer makerId;
+    @Column(name = "amount_in_shop")
     private Integer amountInShop;
-    @Column("description")
+    @Column(name = "description")
     private String description;
-    @Column("price")
+    @Column(name = "price")
     private Double price;
-    @Column("discount")
+    @Column(name = "discount")
     private Double discount;
 }

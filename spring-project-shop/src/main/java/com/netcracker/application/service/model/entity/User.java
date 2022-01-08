@@ -1,29 +1,51 @@
 package com.netcracker.application.service.model.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.HashSet;
 
-@Table("User_Details")
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
+@Entity
+@Table(name = "User_Details")
 public class User implements UserDetails {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private BigInteger id;
-    @Column("username")
-    private String name;
-    @Column("password")
+    @Column(name = "username", unique = true)
+    private String username;
+    @Column(name = "password")
     private String password;
+    @Column(name = "role_id")
+    private BigInteger roleId;
+    @Column(name = "email", unique = true)
+    private String email;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Column(name = "address")
+    private String address;
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id", nullable = false)
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return new HashSet<Role>(){{ add(role); }};
     }
 
     @Override
@@ -33,7 +55,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return username;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.netcracker.application.service;
 
 import com.netcracker.application.security.UserService;
+import com.netcracker.application.service.model.entity.Role;
 import com.netcracker.application.service.model.entity.User;
 import com.netcracker.application.service.repository.RoleRepository;
 import com.netcracker.application.service.repository.UserRepository;
@@ -12,17 +13,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.*;
 
 @Service("userDetailsService")
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
@@ -65,5 +68,17 @@ public class UserServiceImpl implements UserService {
             }
         }
         return hasRole;
+    }
+
+    public void createUser(User user) {
+        userRepository.save(user);
+    }
+
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
     }
 }
