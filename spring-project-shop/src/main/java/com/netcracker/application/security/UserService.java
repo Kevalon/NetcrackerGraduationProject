@@ -7,5 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface UserService extends UserDetailsService {
     User getCurrentUser();
 
+    User signupUser(User user);
+
     boolean hasRole(String role);
 }

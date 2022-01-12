@@ -4,20 +4,17 @@ import com.netcracker.application.controller.form.UserRegistrationForm;
 import com.netcracker.application.service.UserServiceImpl;
 import com.netcracker.application.service.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/registration")
+@RequestMapping()
 public class AuthController {
     private final UserServiceImpl userService;
 
@@ -26,26 +23,39 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @GetMapping("/login")
+    public String login() {
+        return "auth/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(Model model) {
+        model.addAttribute("logout", true);
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return "auth/login";
+    }
+
+    @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("user", new UserRegistrationForm());
         return "auth/registration";
     }
 
-    @PostMapping()
-    public String registration(
-            @ModelAttribute("userForm") UserRegistrationForm userRegistrationForm,
-            BindingResult bindingResult,
-            Model model) {
-        if (bindingResult.hasErrors()) {
-            List<String> errorMessages = bindingResult.getAllErrors()
-                    .stream().map(ObjectError::getDefaultMessage)
-                    .collect(Collectors.toList());
-            model.addAttribute("errors", errorMessages);
-            return "auth/registration";
-        }
+    @PostMapping("/registration")
+    public String registration(@ModelAttribute("userForm") UserRegistrationForm userRegistrationForm) {
+        User user = new User();
+        user.setUsername(userRegistrationForm.getUsername());
+        user.setPassword(userRegistrationForm.getPassword());
+        user.setEmail(userRegistrationForm.getEmail());
 
-        userService.createUser(conversionService.convert(userRegistrationForm, User.class));
-        return "redirect:/";
+        userService.signupUser(user);
+
+        return "redirect:/catalogue";
+    }
+
+    @GetMapping("/profile")
+    public String profile() {
+
+        return "auth/profile";
     }
 }

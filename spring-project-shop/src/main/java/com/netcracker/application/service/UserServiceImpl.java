@@ -19,6 +19,9 @@ import java.util.*;
 @Service("userDetailsService")
 public class UserServiceImpl implements UserService {
 
+    private static final BigInteger CUSTOMER_ROLE_ID = BigInteger.valueOf(2);
+    private static final BigInteger ADMIN_ROLE_ID = BigInteger.valueOf(1);
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
@@ -70,8 +73,13 @@ public class UserServiceImpl implements UserService {
         return hasRole;
     }
 
-    public void createUser(User user) {
-        userRepository.save(user);
+    @Override
+    public User signupUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Role userRole = roleRepository.findById(CUSTOMER_ROLE_ID).orElseThrow(IllegalStateException::new);
+        user.setRole(userRole);
+        user.setRoleId(CUSTOMER_ROLE_ID);
+        return userRepository.save(user);
     }
 
     public void updateUser(User user) {
