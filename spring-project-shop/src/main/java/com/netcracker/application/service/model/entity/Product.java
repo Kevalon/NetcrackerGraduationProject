@@ -28,6 +28,8 @@ public class Product {
     private Double price;
     @Column(name = "discount")
     private Double discount;
+    @Column(name = "maker_id")
+    private BigInteger makerId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "maker_id", insertable = false, updatable = false)

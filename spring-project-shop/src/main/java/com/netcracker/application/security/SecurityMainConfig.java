@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -36,8 +37,8 @@ public class SecurityMainConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/css/*", "/js/*", "/registration").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").permitAll()
-                .defaultSuccessUrl("/catalogue", true)
+                .formLogin()
+                .loginPage("/login").permitAll().defaultSuccessUrl("/catalogue", true)
                 .and()
                 .logout().permitAll();
     }

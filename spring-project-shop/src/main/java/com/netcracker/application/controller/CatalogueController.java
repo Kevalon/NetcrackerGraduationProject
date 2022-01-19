@@ -49,22 +49,22 @@ public class CatalogueController {
         return "catalogue/add";
     }
 
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String addProduct(Product product, String maker) {
+        productService.addProduct(product);
+        return "redirect:/catalogue";
+    }
+
     @GetMapping("/{id}/edit")
     @PreAuthorize("hasRole('ADMIN')")
     public String edit(@PathVariable BigInteger id, ModelMap modelMap) {
         Product product = productService.getById(id);
         modelMap.addAttribute("product", product);
-        return "catalogue/edit";
+        return "catalogue/add";
     }
 
-    @PostMapping("/add")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String addProduct(Product product) {
-        productService.addProduct(product);
-        return "redirect:/catalogue";
-    }
-
-    @PostMapping("/{id}/delete")
+    @GetMapping("/{id}/delete")
     @PreAuthorize("hasRole('ADMIN')")
     public String delete(@PathVariable BigInteger id) {
         productService.deleteProduct(id);
