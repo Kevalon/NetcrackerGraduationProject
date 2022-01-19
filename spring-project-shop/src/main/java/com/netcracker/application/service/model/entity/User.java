@@ -40,7 +40,7 @@ public class User implements UserDetails {
     private String phoneNumber;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Role role;
 
     @Override

@@ -11,25 +11,16 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Product")
-public class Product {
-
+@Table(name = "Maker")
+public class Maker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private BigInteger id;
     @Column(name = "name")
     private String name;
-    @Column(name = "amount_in_shop")
-    private Integer amountInShop;
     @Column(name = "description")
     private String description;
-    @Column(name = "price")
-    private Double price;
-    @Column(name = "discount")
-    private Double discount;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "maker_id", insertable = false, updatable = false)
-    private Maker maker;
+    @Column(name = "products_amount", nullable = false)
+    private int productsAmount;
 }
