@@ -51,7 +51,7 @@ public class CatalogueController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public String addProduct(Product product, String maker) {
+    public String addProduct(Product product) {
         productService.addProduct(product);
         return "redirect:/catalogue";
     }
