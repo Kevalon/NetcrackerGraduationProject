@@ -7,7 +7,7 @@
     <div  class="page-header">
         <h2 class="text-center">Search</h2>
     </div>
-    <form th:action="@{/catalogue/search}" method="post" class="form-sign" th:object="${searchForm}">
+    <form th:action="@{/catalogue/search}" method="post" th:object="${searchForm}">
         <div class="form-group">
             <label class="control-label" for="categoryName">Category</label>
             <input type="text" class="form-control" id="categoryName" th:field="*{categoryName}" placeholder="Category" />

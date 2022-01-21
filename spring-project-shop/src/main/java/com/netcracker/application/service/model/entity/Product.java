@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigInteger;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,4 +35,11 @@ public class Product {
     @ManyToOne(optional = false)
     @JoinColumn(name = "maker_id", insertable = false, updatable = false)
     private Maker maker;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Product_and_Category",
+            joinColumns = { @JoinColumn(name = "product_id")},
+            inverseJoinColumns = { @JoinColumn(name = "category_id")})
+    private Set<Category> categories;
 }
