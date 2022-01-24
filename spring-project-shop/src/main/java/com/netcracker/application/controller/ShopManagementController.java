@@ -30,6 +30,11 @@ public class ShopManagementController {
         this.categoryService = categoryService;
     }
 
+    @GetMapping
+    public String main() {
+        return "management/main";
+    }
+
     @GetMapping("/maker")
     public String makers(ModelMap model) {
         List<Maker> makers = makerService.getAll();

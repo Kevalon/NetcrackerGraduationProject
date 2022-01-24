@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
 <body>
 <div th:fragment="content">
     <div  class="page-header">
@@ -9,7 +10,7 @@
     <div th:if="${param.error}" class="alert alert-danger form-sign">
         Invalid username or password.
     </div>
-    <div th:if="${param.logout}" class="alert alert-success form-sign">
+    <div th:if="${logout}" class="alert alert-success form-sign">
         You have been logged out.
     </div>
     <form th:action="@{/login}" method="post" class="form-sign">

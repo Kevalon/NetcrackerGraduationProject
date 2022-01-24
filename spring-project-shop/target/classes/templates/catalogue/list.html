@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
 <head>
     <title>Catalogue</title>
 </head>
@@ -9,6 +10,11 @@
     <div>
         <a href="/catalogue/search">
             <button>Go to Search</button>
+        </a>
+    </div>
+    <div>
+        <a href="/profile">
+            <button>My Profile</button>
         </a>
     </div>
     <div th:each="line : ${json}">

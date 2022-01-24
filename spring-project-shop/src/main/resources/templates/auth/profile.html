@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
 <body>
 <div th:fragment="content">
   Logged user: <span sec:authentication="name">Username</span>
-  <br />
   Roles: <span sec:authentication="principal.authorities">Roles</span>
-
+</div>
+<div>
+  <a href="/logout">
+    <button>Logout</button>
+  </a>
+</div>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+  <a href="/management">
+    <button>Go to Management</button>
+  </a>
+</div>
+<div sec:authorize="hasRole('ROLE_CUSTOMER')">
+  <a href="/profile/edit">
+    <button>Edit your Information</button>
+  </a>
 </div>
 </body>
 </html>
