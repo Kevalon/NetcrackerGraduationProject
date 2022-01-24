@@ -1,5 +1,6 @@
 package com.netcracker.application.controller;
 
+import com.netcracker.application.service.CartService;
 import com.netcracker.application.service.ProductService;
 import com.netcracker.application.service.model.entity.Product;
 import com.netcracker.application.service.model.parser.JsonParser;
@@ -19,10 +20,12 @@ import java.util.List;
 @RequestMapping("/catalogue")
 public class CatalogueController {
     private final ProductService productService;
+    private final CartService cartService;
 
     @Autowired
-    public CatalogueController(ProductService productService) {
+    public CatalogueController(ProductService productService, CartService cartService) {
         this.productService = productService;
+        this.cartService = cartService;
     }
 
     @GetMapping
@@ -31,6 +34,13 @@ public class CatalogueController {
         List<String> json = JsonParser.parse(products);
         model.addAttribute("json", json);
         return "catalogue/list";
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
+    public String addToCart(BigInteger id) {
+        cartService.addToCart(id);
+        return "redirect:/catalogue";
     }
 
     @GetMapping("/{id}")

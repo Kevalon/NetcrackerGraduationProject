@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
-public class HelloController {
+public class IndexController {
 
     @GetMapping
-    public String hello() {
-        return "hello";
+    public String redirect() {
+        return "redirect:/catalogue";
     }
 }

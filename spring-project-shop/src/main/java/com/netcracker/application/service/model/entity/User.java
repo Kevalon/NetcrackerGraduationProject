@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -42,6 +43,10 @@ public class User implements UserDetails {
     @ManyToOne(optional = false)
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Role role;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<Order> orders;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
