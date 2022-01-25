@@ -12,15 +12,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/catalogue/search")
-public class ProductSearchController {
+public class SearchProductController {
     private final SearchService searchService;
 
     @Autowired
-    public ProductSearchController(SearchService searchService) {
+    public SearchProductController(SearchService searchService) {
         this.searchService = searchService;
     }
 
@@ -34,13 +36,14 @@ public class ProductSearchController {
     }
 
     @PostMapping
-    public String beforeSearch(@ModelAttribute("searchForm") SearchForm searchForm, Model model) {
+    public String afterSearch(@ModelAttribute("searchForm") SearchForm searchForm, Model model) {
         List<Product> resultOfSearch = searchService.getResult(searchForm);
         if (resultOfSearch.size() == 0) {
             model.addAttribute("nothing", true);
         } else {
-            List<String> json = JsonParser.parse(resultOfSearch);
-            model.addAttribute("resultSearchList", json);
+            Map<BigInteger, String> jsonMap = JsonParser.parseToMap(resultOfSearch);
+            model.addAttribute("jsonMap", jsonMap);
+            return "search/after";
         }
         return "search/after";
     }

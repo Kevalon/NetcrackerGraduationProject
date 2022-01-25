@@ -14,7 +14,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "Order")
-public class Order {
+public class Order implements MappableEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

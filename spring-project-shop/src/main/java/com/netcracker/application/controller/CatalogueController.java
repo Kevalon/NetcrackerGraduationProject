@@ -36,7 +36,7 @@ public class CatalogueController {
     @GetMapping
     public String products(ModelMap model) {
         List<Product> products = productService.getAll();
-        Map<BigInteger, String> jsonMap = JsonParser.parseProducts(products);
+        Map<BigInteger, String> jsonMap = JsonParser.parseToMap(products);
         model.addAttribute("jsonMap", jsonMap);
         return "catalogue/list";
     }
@@ -48,6 +48,7 @@ public class CatalogueController {
         String json = JsonParser.parse(product);
         model.addAttribute("json", json);
         model.addAttribute("productId", id);
+        model.addAttribute("title", product.getName());
         return "catalogue/one";
     }
 

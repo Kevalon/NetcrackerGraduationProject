@@ -12,7 +12,7 @@ import java.math.BigInteger;
 @Data
 @Entity
 @Table(name = "Category")
-public class Category {
+public class Category implements MappableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

@@ -2,7 +2,7 @@ package com.netcracker.application.service.model.parser;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netcracker.application.service.model.entity.Product;
+import com.netcracker.application.service.model.entity.MappableEntity;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -34,10 +34,10 @@ public class JsonParser {
         }
     }
 
-    public static Map<BigInteger, String> parseProducts(List<Product> products) {
+    public static Map<BigInteger, String> parseToMap(List<? extends MappableEntity> entities) {
         Map<BigInteger, String> result = new HashMap<>();
-        for (Product product : products) {
-            result.put(product.getId(), parse(product));
+        for (MappableEntity entity : entities) {
+            result.put(entity.getId(), parse(entity));
         }
         return result;
     }

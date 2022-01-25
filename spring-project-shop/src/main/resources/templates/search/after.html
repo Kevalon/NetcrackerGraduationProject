@@ -10,10 +10,15 @@
 <div th:if="${nothing}">
     Sorry. Nothing was found.
 </div>
-<div th:each="line : ${resultSearchList}">
-    <p th:text="${line}">
+<div th:each="instance : ${jsonMap}">
+    <p th:text="${instance.value}">
         <span style="white-space: pre-line"></span>
     </p>
+    <form th:action="|@{/catalogue/}${instance.key}|" method="get">
+        <p>
+            <input class="btn btn-success btn-block" type="submit" value="Go to Product"/>
+        </p>
+    </form>
 </div>
 </body>
 </html>

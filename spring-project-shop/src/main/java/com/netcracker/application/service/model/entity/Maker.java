@@ -12,7 +12,7 @@ import java.math.BigInteger;
 @Data
 @Entity
 @Table(name = "Maker")
-public class Maker {
+public class Maker implements MappableEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

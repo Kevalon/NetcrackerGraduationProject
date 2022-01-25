@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class MakerService {
@@ -47,5 +44,11 @@ public class MakerService {
     public void delete(BigInteger id) {
         makerRepository.delete(makers.get(id));
         makers.remove(id);
+    }
+
+    public void update(Maker maker) {
+        Maker makerForUpdate = makers.get(maker.getId());
+        makerForUpdate.setProductsAmount(maker.getProductsAmount());
+        makerRepository.save(makerForUpdate);
     }
 }

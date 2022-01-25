@@ -6,11 +6,29 @@
     <title>All categories</title>
 </head>
 <body>
+    <a href="/catalogue">
+        <button>Back to Catalogue</button>
+    </a>
+    <a href="/management">
+        <button>Back to Management</button>
+    </a>
+    <div>
+        <form th:action="|@{/management/category/add}|" method="GET">
+            <p>
+                <input class="btn btn-success btn-block" type="submit" value="Add new Category"/>
+            </p>
+        </form>
+    </div>
     <h2>Existing Categories</h2>
-    <div th:each="line : ${json}">
-        <p th:text="${line}">
+    <div th:each="instance : ${jsonMap}">
+        <p th:text="${instance.value}">
             <span style="white-space: pre-line"></span>
         </p>
+        <form th:action="|@{/management/category/}${instance.key}|" method="get">
+            <p>
+                <input class="btn btn-success btn-block" type="submit" value="Go to Category"/>
+            </p>
+        </form>
     </div>
 </body>
 </html>

@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "Product")
-public class Product {
+public class Product implements MappableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,7 @@ public class Product {
     @JoinColumn(name = "maker_id", insertable = false, updatable = false)
     private Maker maker;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "Product_and_Category",
             joinColumns = {@JoinColumn(name = "product_id")},

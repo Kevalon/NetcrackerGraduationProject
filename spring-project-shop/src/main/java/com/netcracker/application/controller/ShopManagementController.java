@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @PreAuthorize("hasRole('ADMIN')")
@@ -38,8 +39,8 @@ public class ShopManagementController {
     @GetMapping("/maker")
     public String makers(ModelMap model) {
         List<Maker> makers = makerService.getAll();
-        List<String> json = JsonParser.parse(makers);
-        model.addAttribute("json", json);
+        Map<BigInteger, String> jsonMap = JsonParser.parseToMap(makers);
+        model.addAttribute("jsonMap", jsonMap);
         return "management/maker/list";
     }
 
@@ -48,6 +49,8 @@ public class ShopManagementController {
         Maker maker = makerService.getById(id);
         String json = JsonParser.parse(maker);
         model.addAttribute("json", json);
+        model.addAttribute("title", maker.getName());
+        model.addAttribute("makerId", id);
         return "management/maker/one";
     }
 
@@ -79,8 +82,8 @@ public class ShopManagementController {
     @GetMapping("/category")
     public String categories(ModelMap model) {
         List<Category> categories = categoryService.getAll();
-        List<String> json = JsonParser.parse(categories);
-        model.addAttribute("json", json);
+        Map<BigInteger, String> jsonMap = JsonParser.parseToMap(categories);
+        model.addAttribute("jsonMap", jsonMap);
         return "management/category/list";
     }
 
@@ -89,6 +92,8 @@ public class ShopManagementController {
         Category category = categoryService.getById(id);
         String json = JsonParser.parse(category);
         model.addAttribute("json", json);
+        model.addAttribute("title", category.getName());
+        model.addAttribute("categoryId", id);
         return "management/category/one";
     }
 
@@ -101,7 +106,7 @@ public class ShopManagementController {
     @PostMapping("category/add")
     public String addCategory(Category category) {
         categoryService.add(category);
-        return "redirect:/management/category";
+        return "management/category/list";
     }
 
     @GetMapping("category/{id}/edit")

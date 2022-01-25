@@ -3,13 +3,25 @@
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
 <head>
-    <title>One category</title>
+    <title th:text="${title}"></title>
 </head>
 <body>
 <div>
     <p th:text="${json}">
         <span style="white-space: pre-line"></span>
     </p>
+    <div>
+        <form th:action="|@{/management/category/}${categoryId}/edit|" method="GET">
+            <p>
+                <input class="btn btn-success btn-block" type="submit" value="Edit Category"/>
+            </p>
+        </form>
+        <form th:action="|@{/management/category/}${categoryId}/delete|" method="GET">
+            <p>
+                <input class="btn btn-success btn-block" type="submit" value="Delete Category"/>
+            </p>
+        </form>
+    </div>
 </div>
 </body>
 </html>

@@ -32,7 +32,7 @@ public class SecurityMainConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login").permitAll().defaultSuccessUrl("/catalogue", true)
+                .loginPage("/login").permitAll() //.defaultSuccessUrl("/catalogue", true)
                 .and()
                 .logout().permitAll();
     }
