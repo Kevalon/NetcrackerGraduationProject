@@ -39,7 +39,7 @@ public class Product {
     @ManyToMany
     @JoinTable(
             name = "Product_and_Category",
-            joinColumns = { @JoinColumn(name = "product_id")},
-            inverseJoinColumns = { @JoinColumn(name = "category_id")})
+            joinColumns = {@JoinColumn(name = "product_id")},
+            inverseJoinColumns = {@JoinColumn(name = "category_id")})
     private Set<Category> categories;
 }

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigInteger;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -25,10 +25,10 @@ public class Order {
     private Double totalSum;
     @Column(name = "amount_of_goods", nullable = false)
     private Integer goodsAmount;
-    @Column(name = "is_closed")
-    private Boolean isClosed;
+    @Column(name = "is_closed", columnDefinition = "BIT")
+    private boolean isClosed;
     @Column(name = "creation_date")
-    private Date creationDate;
+    private Timestamp creationDate;
 
     @ManyToMany
     @JoinTable(

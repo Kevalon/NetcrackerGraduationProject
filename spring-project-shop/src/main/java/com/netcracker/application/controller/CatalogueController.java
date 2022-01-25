@@ -2,7 +2,9 @@ package com.netcracker.application.controller;
 
 import com.netcracker.application.service.CartService;
 import com.netcracker.application.service.ProductService;
+import com.netcracker.application.service.UserServiceImpl;
 import com.netcracker.application.service.model.entity.Product;
+import com.netcracker.application.service.model.entity.User;
 import com.netcracker.application.service.model.parser.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,41 +17,55 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/catalogue")
 public class CatalogueController {
     private final ProductService productService;
     private final CartService cartService;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public CatalogueController(ProductService productService, CartService cartService) {
+    public CatalogueController(ProductService productService, CartService cartService, UserServiceImpl userService) {
         this.productService = productService;
         this.cartService = cartService;
+        this.userService = userService;
     }
 
     @GetMapping
     public String products(ModelMap model) {
         List<Product> products = productService.getAll();
-        List<String> json = JsonParser.parse(products);
-        model.addAttribute("json", json);
+        Map<BigInteger, String> jsonMap = JsonParser.parseProducts(products);
+        model.addAttribute("jsonMap", jsonMap);
         return "catalogue/list";
     }
 
-    @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
-    public String addToCart(BigInteger id) {
-        cartService.addToCart(id);
-        return "redirect:/catalogue";
-    }
-
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public String getProduct(@PathVariable BigInteger id, ModelMap model) {
         Product product = productService.getById(id);
         String json = JsonParser.parse(product);
         model.addAttribute("json", json);
+        model.addAttribute("productId", id);
         return "catalogue/one";
+    }
+
+    @PostMapping("/{productId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
+    public String addToCart(@PathVariable BigInteger productId, ModelMap model) {
+        User curUser = userService.getCurrentUser();
+        Product addedProduct = productService.getById(productId);
+
+        if (productService.getById(productId).getAmountInShop()
+                - curUser.getProductAmount(addedProduct) == 0) {
+            model.addAttribute("error", true);
+            return getProduct(productId, model);
+        }
+
+        cartService.addToCart(addedProduct);
+        model.addAttribute("success", true);
+        return getProduct(productId, model);
     }
 
     @GetMapping("/add")

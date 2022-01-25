@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
 <head>
     <title>One product</title>
 </head>
@@ -9,6 +11,33 @@
     <p th:text="${json}">
         <span style="white-space: pre-line"></span>
     </p>
+    <form th:action="|@{/catalogue/}${productId}|" method="POST">
+        <p>
+            <input class="btn btn-success btn-block" type="submit" value="Add to Cart"/>
+        </p>
+    </form>
+    <p th:if="${error}" >
+        Sorry, this product is not available anymore.
+    </p>
+    <p th:if="${success}" >
+        Product was successfully added to the cart!
+    </p>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <form th:action="|@{/catalogue/}${productId}/edit|" method="GET">
+            <p>
+                <input class="btn btn-success btn-block" type="submit" value="Edit Product"/>
+            </p>
+        </form>
+        <form th:action="|@{/catalogue/}${productId}/delete|" method="GET">
+            <p>
+                <input class="btn btn-success btn-block" type="submit" value="Delete Product"/>
+            </p>
+        </form>
+    </div>
+    <a href="/catalogue">
+        <button>Back to Catalogue</button>
+    </a>
 </div>
+
 </body>
 </html>

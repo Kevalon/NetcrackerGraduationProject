@@ -8,9 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 @NoArgsConstructor
@@ -40,13 +38,24 @@ public class User implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Role role;
 
     @OneToMany
     @JoinColumn(name = "user_id")
     private Set<Order> orders;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "Cart",
+            joinColumns = { @JoinColumn(name = "product_id")},
+            inverseJoinColumns = { @JoinColumn(name = "user_id")})
+    private List<Product> cart;
+
+    public int getProductAmount(Product product) {
+        return Collections.frequency(cart, product);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

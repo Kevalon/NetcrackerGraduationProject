@@ -48,4 +48,10 @@ public class ProductService {
         productRepository.delete(products.get(id));
         products.remove(id);
     }
+
+    public void updateProduct(BigInteger id, Product product) {
+        productRepository.delete(products.get(id));
+        productRepository.save(product);
+        products.clear();
+    }
 }
