@@ -1,5 +1,6 @@
 package com.netcracker.application.service;
 
+import com.netcracker.application.controller.form.ProfileEditForm;
 import com.netcracker.application.security.UserService;
 import com.netcracker.application.service.model.entity.Role;
 import com.netcracker.application.service.model.entity.User;
@@ -80,6 +81,17 @@ public class UserServiceImpl implements UserService {
         user.setRole(userRole);
         user.setRoleId(CUSTOMER_ROLE_ID);
         return userRepository.save(user);
+    }
+
+    public ProfileEditForm getProfileEditForm(User user) {
+        ProfileEditForm profileEditForm = new ProfileEditForm();
+
+        profileEditForm.setAddress(user.getAddress());
+        profileEditForm.setFirstName(user.getFirstName());
+        profileEditForm.setLastName(user.getLastName());
+        profileEditForm.setPhoneNumber(user.getPhoneNumber());
+
+        return profileEditForm;
     }
 
     public void updateUser(User user) {

@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class ProductService {
@@ -43,10 +40,13 @@ public class ProductService {
     }
 
     public void addProduct(Product product) {
+        if (Objects.isNull(product.getId())) {
+            Maker maker = makerService.getById(product.getMakerId());
+            maker.setProductsAmount(maker.getProductsAmount() + 1);
+            makerService.update(maker);
+        }
+
         productRepository.save(product);
-        Maker maker = makerService.getById(product.getMakerId());
-        maker.setProductsAmount(maker.getProductsAmount() + 1);
-        makerService.update(maker);
         products.clear();
     }
 

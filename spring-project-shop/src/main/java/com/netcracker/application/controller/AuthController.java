@@ -1,5 +1,6 @@
 package com.netcracker.application.controller;
 
+import com.netcracker.application.controller.form.ProfileEditForm;
 import com.netcracker.application.controller.form.UserRegistrationForm;
 import com.netcracker.application.service.UserServiceImpl;
 import com.netcracker.application.service.model.entity.User;
@@ -55,5 +56,24 @@ public class AuthController {
     @GetMapping("/profile")
     public String profile() {
         return "auth/profile";
+    }
+
+    @GetMapping("/profile/edit")
+    public String editProfile(Model model) {
+        ProfileEditForm profileEditForm = userService.getProfileEditForm(userService.getCurrentUser());
+        model.addAttribute("profileInfoForm", profileEditForm);
+        return "auth/editProfile";
+    }
+
+    @PostMapping("/profile/edit")
+    public String editProfile(@ModelAttribute("profileInfoForm") ProfileEditForm profileEditForm) {
+        User user = userService.getCurrentUser();
+        user.setFirstName(profileEditForm.getFirstName());
+        user.setLastName(profileEditForm.getLastName());
+        user.setAddress(profileEditForm.getAddress());
+        user.setPhoneNumber(profileEditForm.getPhoneNumber());
+
+        userService.updateUser(user);
+        return "redirect:/profile";
     }
 }
