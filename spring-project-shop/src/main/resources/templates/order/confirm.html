@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+</head>
+<body>
+<div th:if="${error}">
+    <h2>Sorry, some products are not available anymore. Check the catalogue again</h2>
+    <a href="/catalogue">
+        <button>Go back to catalogue</button>
+    </a>
+</div>
+<div th:if="${!error}">
+
+</div>
+
+</body>
+</html>

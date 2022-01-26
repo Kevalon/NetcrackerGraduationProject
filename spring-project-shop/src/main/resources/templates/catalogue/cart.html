@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <title>Shopping Cart</title>
+</head>
+<body>
+<h2>Added Products</h2>
+<div th:if="${nothing}">
+    <h4>Cart is empty</h4>
+</div>
+<div th:each="instance : ${jsonMap}">
+    <p th:text="${instance.value}">
+        <span style="white-space: pre-line"></span>
+    </p>
+    <form th:action="|@{/cart/delete/}${instance.key}|" method="get">
+        <p>
+            <input class="btn btn-success btn-block" type="submit" value="Delete from Cart"/>
+        </p>
+    </form>
+</div>
+
+<div th:if="${nothing} == false">
+    <h3>Products information</h3>
+    <div th:text="${totalSum}">
+        <span style="white-space: pre-line"></span>
+    </div>
+    <div th:text="${amountOfProducts}">
+        <span style="white-space: pre-line"></span>
+    </div>
+    <div>
+        <a href="/order/confirm">
+            <button>Buy now</button>
+        </a>
+    </div>
+</div>
+<div>
+    <a href="/catalogue">
+        <button>Back to Catalogue</button>
+    </a>
+</div>
+
+</body>
+</html>

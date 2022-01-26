@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class OrdersService {
+public class OrderService {
     private final Map<BigInteger, Order> orders = new HashMap<>();
     private final OrderRepository orderRepository;
 
     @Autowired
-    public OrdersService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 

@@ -2,6 +2,7 @@ package com.netcracker.application.service;
 
 import com.netcracker.application.controller.form.ProfileEditForm;
 import com.netcracker.application.security.UserService;
+import com.netcracker.application.service.model.entity.Product;
 import com.netcracker.application.service.model.entity.Role;
 import com.netcracker.application.service.model.entity.User;
 import com.netcracker.application.service.repository.RoleRepository;
