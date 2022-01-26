@@ -57,4 +57,11 @@ public class ProductService {
         makerService.update(maker);
         products.remove(id);
     }
+
+    public void buyOne(BigInteger productId) {
+        Product product = products.get(productId);
+        product.setAmountInShop(product.getAmountInShop() - 1);
+        productRepository.save(product);
+        products.clear();
+    }
 }

@@ -36,11 +36,12 @@ public class CartController {
             model.addAttribute("nothing", true);
         } else {
             Map<BigInteger, String> jsonMap = JsonParser.parseToMap(cart);
+            model.addAttribute("nothing", false);
             model.addAttribute("jsonMap", jsonMap);
             model.addAttribute(
                     "amountOfProducts",
                     "Amount of Products in the cart: " + cart.size());
-            model.addAttribute("totalSum", "Total cost: " + cartService.getTotalCost(cart));
+            model.addAttribute("totalSum", "Subtotal: " + cartService.getTotalCost(cart));
         }
         return "catalogue/cart";
     }

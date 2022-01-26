@@ -59,7 +59,7 @@ public class CatalogueController {
         Product addedProduct = productService.getById(productId);
 
         if (productService.getById(productId).getAmountInShop()
-                - curUser.getProductAmount(addedProduct) == 0) {
+                - curUser.getSingleProductAmount(addedProduct) == 0) {
             model.addAttribute("error", true);
             return getProduct(productId, model);
         }

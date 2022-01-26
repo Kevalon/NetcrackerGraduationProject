@@ -21,7 +21,7 @@
     </form>
 </div>
 
-<div th:if="${nothing} == false">
+<div th:if="${!nothing}">
     <h3>Products information</h3>
     <div th:text="${totalSum}">
         <span style="white-space: pre-line"></span>

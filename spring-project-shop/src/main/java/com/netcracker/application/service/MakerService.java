@@ -50,5 +50,6 @@ public class MakerService {
         Maker makerForUpdate = makers.get(maker.getId());
         makerForUpdate.setProductsAmount(maker.getProductsAmount());
         makerRepository.save(makerForUpdate);
+        makers.clear();
     }
 }

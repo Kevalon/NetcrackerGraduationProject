@@ -46,14 +46,10 @@ public class User implements UserDetails {
     @JoinColumn(name = "user_id")
     private Set<Order> orders;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "Cart",
-            joinColumns = { @JoinColumn(name = "product_id")},
-            inverseJoinColumns = { @JoinColumn(name = "user_id")})
-    private List<Product> cart;
+    @Transient
+    private List<Product> cart = new ArrayList<>();
 
-    public int getProductAmount(Product product) {
+    public int getSingleProductAmount(Product product) {
         return Collections.frequency(cart, product);
     }
 

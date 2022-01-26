@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,15 +25,19 @@ public class Order implements MappableEntity{
     private Double totalSum;
     @Column(name = "amount_of_goods", nullable = false)
     private Integer goodsAmount;
-    @Column(name = "is_closed", columnDefinition = "BIT")
-    private boolean isClosed;
     @Column(name = "creation_date")
     private Timestamp creationDate;
+    @Column(name = "client_name", nullable = false)
+    private String name;
+    @Column(name = "client_address", nullable = false)
+    private String address;
+    @Column(name = "client_phone", nullable = false)
+    private String phoneNumber;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "Orders_and_Product",
             joinColumns = { @JoinColumn(name = "order_id")},
             inverseJoinColumns = { @JoinColumn(name = "product_id")})
-    private Set<Product> products;
+    private List<Product> products;
 }
