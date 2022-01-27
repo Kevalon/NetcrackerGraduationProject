@@ -15,7 +15,7 @@ import java.util.*;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "User_Details")
+@Table(name = "user_details")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,10 +41,6 @@ public class User implements UserDetails {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Role role;
-
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    private Set<Order> orders;
 
     @Transient
     private List<Product> cart = new ArrayList<>();

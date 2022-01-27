@@ -4,9 +4,10 @@ import com.netcracker.application.controller.form.ProfileEditForm;
 import com.netcracker.application.service.CartService;
 import com.netcracker.application.service.OrderService;
 import com.netcracker.application.service.UserServiceImpl;
-import com.netcracker.application.service.model.entity.Order;
 import com.netcracker.application.service.model.entity.User;
+import com.netcracker.application.service.model.parser.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +15,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/order")
+@PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
 public class OrderController {
     private final CartService cartService;
     private final UserServiceImpl userService;
@@ -66,5 +71,20 @@ public class OrderController {
         }
         orderService.formOrder(userService.getCurrentUser(), profileEditForm);
         return "order/success";
+    }
+
+    @GetMapping("/customer")
+    public String showCustomerOrders(Model model) {
+        List<String> jsonList = JsonParser.parse(orderService.getAllForOneUser(userService.getCurrentUser()));
+        model.addAttribute("nothing", jsonList.size() < 1);
+        model.addAttribute("jsonList", jsonList);
+        return "order/customer";
+    }
+
+    @GetMapping("/admin")
+    public String showAllOrders(Model model) {
+        List<String> jsonList = JsonParser.parse(orderService.getAll());
+        model.addAttribute("jsonList", jsonList);
+        return "order/admin";
     }
 }

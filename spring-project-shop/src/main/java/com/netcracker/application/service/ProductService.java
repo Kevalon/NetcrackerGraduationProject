@@ -59,7 +59,7 @@ public class ProductService {
     }
 
     public void buyOne(BigInteger productId) {
-        Product product = products.get(productId);
+        Product product = getById(productId);
         product.setAmountInShop(product.getAmountInShop() - 1);
         productRepository.save(product);
         products.clear();

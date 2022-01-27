@@ -121,5 +121,4 @@ public class ShopManagementController {
         categoryService.delete(id);
         return "redirect:/management/category";
     }
-
 }

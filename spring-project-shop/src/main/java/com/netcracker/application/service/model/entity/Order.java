@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Order")
+@Table(name = "orders")
 public class Order implements MappableEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

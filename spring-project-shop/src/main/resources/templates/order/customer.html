@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <title>Your Orders</title>
+</head>
+<body>
+<h2>Previous Orders</h2>
+<div th:if="${nothing}">
+    <h4>You haven't ordered anything yet.</h4>
+</div>
+<div th:if="${!nothing}">
+    <div th:each="line : ${jsonList}">
+        <p th:text="${line}">
+            <span style="white-space: pre-line"></span>
+        </p>
+    </div>
+</div>
+<div>
+    <a href="/profile">
+        <button>Back to Profile</button>
+    </a>
+</div>
+</body>
+</html>

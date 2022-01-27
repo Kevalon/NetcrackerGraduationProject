@@ -67,6 +67,10 @@ public class OrderService {
         return new ArrayList<>(orders.values());
     }
 
+    public List<Order> getAllForOneUser(User user) {
+        return getAll().stream().filter(o -> o.getUserId().equals(user.getId())).collect(Collectors.toList());
+    }
+
     public Order getById(BigInteger id) {
         fill();
         return orders.get(id);
