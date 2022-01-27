@@ -42,7 +42,6 @@ public class OrderService {
     public void formOrder(User user, ProfileEditForm profileEditForm) {
         Order order = new Order();
         order.setUserId(user.getId());
-        order.setProducts(user.getCart());
         order.setTotalSum(cartService.getTotalCost(user.getCart()));
         order.setGoodsAmount(user.getCart().size());
         order.setCreationDate(new Timestamp(new Date().getTime()));
@@ -78,7 +77,7 @@ public class OrderService {
 
     public void add(Order order) {
         orderRepository.save(order);
-        Map<Product, Long> productsToRemove = order.getProducts()
+        Map<Product, Long> productsToRemove = productService.getAllForOneOrder(order)
                 .stream()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         for (Map.Entry<Product, Long> entry : productsToRemove.entrySet()) {

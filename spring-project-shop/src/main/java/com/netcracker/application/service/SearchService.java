@@ -12,10 +12,12 @@ import java.util.stream.Stream;
 @Component
 public class SearchService {
     private final ProductService productService;
+    private final MakerService makerService;
 
     @Autowired
-    public SearchService(ProductService productService) {
+    public SearchService(ProductService productService, MakerService makerService) {
         this.productService = productService;
+        this.makerService = makerService;
     }
 
     public List<Product> getResult(SearchForm searchForm) {
@@ -30,7 +32,8 @@ public class SearchService {
             resultStream = resultStream.filter(p -> p.getName().contains(searchForm.getProductName()));
         }
         if (!searchForm.getMakerName().equals("")) {
-            resultStream = resultStream.filter(p -> p.getMaker().getName().contains(searchForm.getMakerName()));
+            resultStream =
+                    resultStream.filter(p -> makerService.getById(p.getMakerId()).getName().contains(searchForm.getMakerName()));
         }
         resultStream = resultStream
                 .filter(p -> p.getPrice() >= searchForm.getMinPrice() && p.getPrice() <= searchForm.getMaxPrice());

@@ -32,10 +32,6 @@ public class Product implements MappableEntity {
     @Column(name = "maker_id")
     private BigInteger makerId;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "maker_id", insertable = false, updatable = false)
-    private Maker maker;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "Product_and_Category",

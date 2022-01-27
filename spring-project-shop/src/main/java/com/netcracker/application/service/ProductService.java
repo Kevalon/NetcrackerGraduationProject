@@ -1,6 +1,7 @@
 package com.netcracker.application.service;
 
 import com.netcracker.application.service.model.entity.Maker;
+import com.netcracker.application.service.model.entity.Order;
 import com.netcracker.application.service.model.entity.Product;
 import com.netcracker.application.service.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class ProductService {
@@ -32,6 +34,10 @@ public class ProductService {
     public List<Product> getAll() {
         fill();
         return new ArrayList<>(products.values());
+    }
+
+    public List<Product> getAllForOneOrder(Order order) {
+        return getAll().stream().filter(p -> p.getId().equals(order.getId())).collect(Collectors.toList());
     }
 
     public Product getById(BigInteger id) {
