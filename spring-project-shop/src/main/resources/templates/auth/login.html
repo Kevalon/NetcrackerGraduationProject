@@ -13,6 +13,9 @@
     <div th:if="${logout}" class="alert alert-success form-sign">
         You have been logged out.
     </div>
+    <div th:if="${successfulRegistration}" class="alert alert-success form-sign">
+        Your account has been created. Please log in to continue.
+    </div>
     <form th:action="@{/login}" method="post" class="form-sign">
         <div class="form-group">
             <label class="control-label" for="username">User Name</label>

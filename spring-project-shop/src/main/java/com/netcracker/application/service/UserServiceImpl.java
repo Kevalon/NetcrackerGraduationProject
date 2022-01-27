@@ -1,8 +1,8 @@
 package com.netcracker.application.service;
 
 import com.netcracker.application.controller.form.ProfileEditForm;
+import com.netcracker.application.controller.form.UserRegistrationForm;
 import com.netcracker.application.security.UserService;
-import com.netcracker.application.service.model.entity.Product;
 import com.netcracker.application.service.model.entity.Role;
 import com.netcracker.application.service.model.entity.User;
 import com.netcracker.application.service.repository.RoleRepository;
@@ -17,22 +17,36 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service("userDetailsService")
 public class UserServiceImpl implements UserService {
-
     private static final BigInteger CUSTOMER_ROLE_ID = BigInteger.valueOf(2);
     private static final BigInteger ADMIN_ROLE_ID = BigInteger.valueOf(1);
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    private final Map<BigInteger, User> users = new HashMap<>();
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+    }
+
+    private void fill() {
+        if (users.isEmpty()) {
+            for (User user : userRepository.findAll()) {
+                users.put(user.getId(), user);
+            }
+        }
+    }
+
+    public List<User> getAll() {
+        fill();
+        return new ArrayList<>(users.values());
     }
 
     @Autowired
@@ -81,6 +95,7 @@ public class UserServiceImpl implements UserService {
         Role userRole = roleRepository.findById(CUSTOMER_ROLE_ID).orElseThrow(IllegalStateException::new);
         user.setRole(userRole);
         user.setRoleId(CUSTOMER_ROLE_ID);
+        users.clear();
         return userRepository.save(user);
     }
 
@@ -95,11 +110,27 @@ public class UserServiceImpl implements UserService {
         return profileEditForm;
     }
 
+    public String checkRegistrationValidity(UserRegistrationForm userRegistrationForm) {
+        List<User> usersList = getAll();
+        if (!userRegistrationForm.getPassword().equals(userRegistrationForm.getConfirmPassword())) {
+            return "Password and Confirm password do not match";
+        }
+        if (usersList.stream().anyMatch(u -> u.getUsername().equals(userRegistrationForm.getUsername()))) {
+            return "This username is already taken";
+        }
+        if (usersList.stream().anyMatch(u -> u.getEmail().equals(userRegistrationForm.getEmail()))) {
+            return "Account with this email already exists";
+        }
+        return "";
+    }
+
     public void updateUser(User user) {
         userRepository.save(user);
+        users.clear();
     }
 
     public void deleteUser(User user) {
+        users.remove(user.getId());
         userRepository.delete(user);
     }
 }

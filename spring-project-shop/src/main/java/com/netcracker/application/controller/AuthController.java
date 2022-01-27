@@ -42,15 +42,27 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") UserRegistrationForm userRegistrationForm) {
+    public String registration(@ModelAttribute("userForm") UserRegistrationForm userRegistrationForm, Model model) {
+
+        String errorMessage = userService.checkRegistrationValidity(userRegistrationForm);
+        if (!errorMessage.equals("")) {
+            model.addAttribute("error", true);
+            model.addAttribute("errorMessage", errorMessage);
+            userRegistrationForm.setPassword("");
+            userRegistrationForm.setUsername("");
+            userRegistrationForm.setConfirmPassword("");
+            model.addAttribute("user", userRegistrationForm);
+            return "auth/registration";
+        }
+
         User user = new User();
         user.setUsername(userRegistrationForm.getUsername());
         user.setPassword(userRegistrationForm.getPassword());
         user.setEmail(userRegistrationForm.getEmail());
-
         userService.signupUser(user);
+        model.addAttribute("successfulRegistration", true);
 
-        return "redirect:/catalogue";
+        return "redirect:/login";
     }
 
     @GetMapping("/profile")
