@@ -51,7 +51,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new HashSet<Role>(){{ add(role); }};
+        return new HashSet<Role>() {{
+            add(role);
+        }};
     }
 
     @Override

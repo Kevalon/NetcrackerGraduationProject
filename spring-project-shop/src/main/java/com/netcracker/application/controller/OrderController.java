@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -34,8 +33,11 @@ public class OrderController {
     }
 
     @GetMapping("/confirm")
-    public String confirmOrder (Model model) {
+    public String confirmOrder(Model model) {
         User user = userService.getCurrentUser();
+        if (user.getCart().isEmpty()) {
+            return "redirect:/cart";
+        }
         if (!cartService.areProductsStillAvailable(user)) {
             model.addAttribute("error", true);
         } else {
@@ -51,7 +53,7 @@ public class OrderController {
     }
 
     @PostMapping("/confirm")
-    public String confirmOrder (@ModelAttribute("profileInfoForm") ProfileEditForm profileEditForm, Model model) {
+    public String confirmOrder(@ModelAttribute("profileInfoForm") ProfileEditForm profileEditForm, Model model) {
         boolean check;
         try {
             check = orderService.isValid(profileEditForm);
@@ -82,6 +84,7 @@ public class OrderController {
     }
 
     @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showAllOrders(Model model) {
         List<String> jsonList = JsonParser.parse(orderService.getAll());
         model.addAttribute("jsonList", jsonList);

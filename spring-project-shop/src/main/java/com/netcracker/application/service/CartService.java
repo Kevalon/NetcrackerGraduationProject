@@ -42,8 +42,8 @@ public class CartService {
     public boolean areProductsStillAvailable(User user) {
         List<Product> cart = user.getCart();
         Map<Product, Long> frequency = user.getCart()
-                        .stream()
-                        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+                .stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         for (Map.Entry<Product, Long> entry : frequency.entrySet()) {
             Product product = productService.getById(entry.getKey().getId());
             if (Objects.isNull(product) || product.getAmountInShop() < entry.getValue()) {

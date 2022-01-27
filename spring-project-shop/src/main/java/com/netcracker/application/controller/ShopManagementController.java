@@ -2,6 +2,7 @@ package com.netcracker.application.controller;
 
 import com.netcracker.application.service.CategoryService;
 import com.netcracker.application.service.MakerService;
+import com.netcracker.application.service.ProductService;
 import com.netcracker.application.service.model.entity.Category;
 import com.netcracker.application.service.model.entity.Maker;
 import com.netcracker.application.service.model.parser.JsonParser;
@@ -24,11 +25,16 @@ import java.util.Map;
 public class ShopManagementController {
     private final MakerService makerService;
     private final CategoryService categoryService;
+    private final ProductService productService;
 
     @Autowired
-    public ShopManagementController(MakerService makerService, CategoryService categoryService) {
+    public ShopManagementController(
+            MakerService makerService,
+            CategoryService categoryService,
+            ProductService productService) {
         this.makerService = makerService;
         this.categoryService = categoryService;
+        this.productService = productService;
     }
 
     @GetMapping
@@ -74,7 +80,13 @@ public class ShopManagementController {
     }
 
     @GetMapping("maker/{id}/delete")
-    public String deleteMaker(@PathVariable BigInteger id) {
+    public String deleteMaker(@PathVariable BigInteger id, ModelMap model) {
+        if (productService.getAll().stream().anyMatch(p -> p.getMakerId().equals(id))) {
+            model.addAttribute("error", true);
+            model.addAttribute("makerId", id);
+            return getMaker(id, model);
+        }
+
         makerService.delete(id);
         return "redirect:/management/maker";
     }

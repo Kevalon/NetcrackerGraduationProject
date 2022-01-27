@@ -21,6 +21,14 @@
                 <input class="btn btn-success btn-block" type="submit" value="Delete Maker"/>
             </p>
         </form>
+        <div th:if="${error}">
+            <p>Failed to delete maker. Check if this maker still has products in the shop</p>
+        </div>
+        <div>
+            <a href="/management/maker">
+                <button>Go back</button>
+            </a>
+        </div>
     </div>
 </div>
 </body>
