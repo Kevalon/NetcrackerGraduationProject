@@ -7,38 +7,48 @@
     <title>Catalogue</title>
 </head>
 <body>
-    <h2>Available products</h2>
-    <div>
-        <a href="/catalogue/search">
-            <button>Go to Search</button>
-        </a>
-    </div>
-    <div>
-        <a href="/profile">
-            <button>My Profile</button>
-        </a>
-    </div>
-    <div>
-        <a href="/cart">
-            <button>Go to cart</button>
-        </a>
-    </div>
-    <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <form th:action="|@{/catalogue/add}|" method="GET">
-            <p>
-                <input class="btn btn-success btn-block" type="submit" value="Add new Product"/>
-            </p>
-        </form>
-    </div>
-    <div th:each="instance : ${jsonMap}">
-        <p th:text="${instance.value}">
-            <span style="white-space: pre-line"></span>
+<h2>Available products</h2>
+<div>
+    <a href="/catalogue/search">
+        <button>Go to Search</button>
+    </a>
+</div>
+<div>
+    <a href="/profile">
+        <button>My Profile</button>
+    </a>
+</div>
+<div>
+    <a href="/cart">
+        <button>Go to cart</button>
+    </a>
+</div>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <form th:action="|@{/catalogue/add}|" method="GET">
+        <p>
+            <input class="btn btn-success btn-block" type="submit" value="Add new Product"/>
         </p>
-        <form th:action="|@{/catalogue/}${instance.key}|" method="get">
-            <p>
-                <input class="btn btn-success btn-block" type="submit" value="Go to Product"/>
-            </p>
-        </form>
-    </div>
+    </form>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Amount in Shop</th>
+        <th>Maker</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+        <td><a th:href="|@{/catalogue/}${product.productId}|" th:text="${product.name}"></a></td>
+        <td><span th:text="${product.description}"></span></td>
+        <td><span th:text="${product.priceWithDiscount}"></span></td>
+        <td><span th:text="${product.amount}"></span></td>
+        <td><span th:text="${product.makerName}"></span></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.netcracker.application.controller;
 
+import com.netcracker.application.controller.form.ProductDisplayForm;
 import com.netcracker.application.service.CartService;
 import com.netcracker.application.service.ProductService;
 import com.netcracker.application.service.UserServiceImpl;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/catalogue")
@@ -35,9 +36,9 @@ public class CatalogueController {
 
     @GetMapping
     public String products(ModelMap model) {
-        List<Product> products = productService.getAll();
-        Map<BigInteger, String> jsonMap = JsonParser.parseToMap(products);
-        model.addAttribute("jsonMap", jsonMap);
+        List<ProductDisplayForm> productDisplayForms =
+                productService.getListOfProductDisplayForm(productService.getAll());
+        model.addAttribute("products", productDisplayForms);
         return "catalogue/list";
     }
 
@@ -45,8 +46,9 @@ public class CatalogueController {
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public String getProduct(@PathVariable BigInteger id, ModelMap model) {
         Product product = productService.getById(id);
-        String json = JsonParser.parse(product);
-        model.addAttribute("json", json);
+        model.addAttribute(
+                "products",
+                productService.getListOfProductDisplayForm(new ArrayList<Product>() {{add(product);}}));
         model.addAttribute("productId", id);
         model.addAttribute("title", product.getName());
         return "catalogue/one";

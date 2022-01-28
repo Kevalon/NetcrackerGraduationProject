@@ -8,10 +8,27 @@
     </title>
 </head>
 <body>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Amount in Shop</th>
+        <th>Maker</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+        <td><span th:text="${product.name}"></span></td>
+        <td><span th:text="${product.description}"></span></td>
+        <td><span th:text="${product.priceWithDiscount}"></span></td>
+        <td><span th:text="${product.amount}"></span></td>
+        <td><span th:text="${product.makerName}"></span></td>
+    </tr>
+    </tbody>
+</table>
 <div>
-    <p th:text="${json}">
-        <span style="white-space: pre-line"></span>
-    </p>
     <form th:action="|@{/catalogue/}${productId}|" method="POST">
         <p>
             <input class="btn btn-success btn-block" type="submit" value="Add to Cart"/>

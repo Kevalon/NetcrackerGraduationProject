@@ -1,9 +1,9 @@
 package com.netcracker.application.controller;
 
 import com.netcracker.application.service.CartService;
+import com.netcracker.application.service.ProductService;
 import com.netcracker.application.service.UserServiceImpl;
 import com.netcracker.application.service.model.entity.Product;
-import com.netcracker.application.service.model.parser.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/cart")
@@ -22,11 +21,13 @@ import java.util.Map;
 public class CartController {
     private final CartService cartService;
     private final UserServiceImpl userService;
+    private final ProductService productService;
 
     @Autowired
-    public CartController(CartService cartService, UserServiceImpl userService) {
+    public CartController(CartService cartService, UserServiceImpl userService, ProductService productService) {
         this.cartService = cartService;
         this.userService = userService;
+        this.productService = productService;
     }
 
     @GetMapping
@@ -35,9 +36,8 @@ public class CartController {
         if (cart.size() < 1) {
             model.addAttribute("nothing", true);
         } else {
-            Map<BigInteger, String> jsonMap = JsonParser.parseToMap(cart);
             model.addAttribute("nothing", false);
-            model.addAttribute("jsonMap", jsonMap);
+            model.addAttribute("products", productService.getListOfProductDisplayForm(cart));
             model.addAttribute(
                     "amountOfProducts",
                     "Amount of Products in the cart: " + cart.size());

@@ -48,6 +48,11 @@ public class UserServiceImpl implements UserService {
         return new ArrayList<>(users.values());
     }
 
+    public User getById(BigInteger id) {
+        fill();
+        return users.get(id);
+    }
+
     @Autowired
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;

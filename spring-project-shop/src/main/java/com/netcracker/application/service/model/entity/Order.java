@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,4 +33,11 @@ public class Order implements MappableEntity {
     private String address;
     @Column(name = "client_phone", nullable = false)
     private String phoneNumber;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "orders_and_product",
+            joinColumns = {@JoinColumn(name = "order_id")},
+            inverseJoinColumns = {@JoinColumn(name = "product_id")})
+    private Set<Product> products;
 }

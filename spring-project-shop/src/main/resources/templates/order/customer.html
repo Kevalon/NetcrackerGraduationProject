@@ -10,13 +10,30 @@
 <div th:if="${nothing}">
     <h4>You haven't ordered anything yet.</h4>
 </div>
-<div th:if="${!nothing}">
-    <div th:each="line : ${jsonList}">
-        <p th:text="${line}">
-            <span style="white-space: pre-line"></span>
-        </p>
-    </div>
-</div>
+<table>
+    <thead>
+    <tr>
+        <th>Order Id</th>
+        <th>Date</th>
+        <th>Products</th>
+        <th>Total Cost</th>
+        <th>Customer Name</th>
+        <th>Customer Address</th>
+        <th>Customer Phone</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td><span th:text="${order.orderId}"></span></td>
+        <td><span th:text="${order.creationDate}"></span></td>
+        <td><a th:href="|@{/order/}${order.orderId}|">view</a></td>
+        <td><span th:text="${order.totalSum}"></span></td>
+        <td><span th:text="${order.customerName}"></span></td>
+        <td><span th:text="${order.customerAddress}"></span></td>
+        <td><span th:text="${order.customerPhoneNumber}"></span></td>
+    </tr>
+    </tbody>
+</table>
 <div>
     <a href="/profile">
         <button>Back to Profile</button>

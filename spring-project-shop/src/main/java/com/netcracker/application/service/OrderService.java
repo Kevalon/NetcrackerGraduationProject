@@ -1,5 +1,7 @@
 package com.netcracker.application.service;
 
+import com.netcracker.application.controller.form.OrderDisplayForm;
+import com.netcracker.application.controller.form.ProductDisplayForm;
 import com.netcracker.application.controller.form.ProfileEditForm;
 import com.netcracker.application.service.model.entity.Order;
 import com.netcracker.application.service.model.entity.Product;
@@ -21,12 +23,14 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartService cartService;
     private final ProductService productService;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, CartService cartService, ProductService productService) {
+    public OrderService(OrderRepository orderRepository, CartService cartService, ProductService productService, UserServiceImpl userService) {
         this.orderRepository = orderRepository;
         this.cartService = cartService;
         this.productService = productService;
+        this.userService = userService;
     }
 
     public boolean isValid(ProfileEditForm profileEditForm) throws IllegalAccessException {
@@ -53,6 +57,26 @@ public class OrderService {
         user.setCart(new ArrayList<>());
     }
 
+    public OrderDisplayForm convertOrderToOrderDisplayForm(Order order) {
+        OrderDisplayForm orderDisplayForm = new OrderDisplayForm();
+        orderDisplayForm.setOrderId(order.getId());
+        orderDisplayForm.setCustomerAddress(order.getAddress());
+        orderDisplayForm.setUsername(userService.getById(order.getUserId()).getUsername());
+        orderDisplayForm.setCustomerName(order.getName());
+        orderDisplayForm.setUserId(order.getUserId());
+        orderDisplayForm.setCustomerPhoneNumber(order.getPhoneNumber());
+        orderDisplayForm.setCreationDate(order.getCreationDate());
+        orderDisplayForm.setTotalSum(order.getTotalSum());
+
+        return orderDisplayForm;
+    }
+
+    public List<OrderDisplayForm> getListOfOrderDisplayForm(List<Order> orders) {
+        return orders.stream()
+                .map(this::convertOrderToOrderDisplayForm)
+                .collect(Collectors.toList());
+    }
+
     private void fill() {
         if (orders.isEmpty()) {
             for (Order order : orderRepository.findAll()) {
@@ -68,6 +92,10 @@ public class OrderService {
 
     public List<Order> getAllForOneUser(User user) {
         return getAll().stream().filter(o -> o.getUserId().equals(user.getId())).collect(Collectors.toList());
+    }
+
+    public List<Product> getProductsForOneOrder(BigInteger orderId) {
+        return new ArrayList<>(getById(orderId).getProducts());
     }
 
     public Order getById(BigInteger id) {

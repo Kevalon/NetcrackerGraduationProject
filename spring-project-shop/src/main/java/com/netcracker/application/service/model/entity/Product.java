@@ -17,19 +17,19 @@ public class Product implements MappableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private BigInteger id;
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "amount_in_shop")
+    @Column(name = "amount_in_shop", nullable = false)
     private Integer amountInShop;
     @Column(name = "description")
     private String description;
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private Double price;
     @Column(name = "discount")
     private Double discount;
-    @Column(name = "maker_id")
+    @Column(name = "maker_id", nullable = false)
     private BigInteger makerId;
 
     @ManyToMany(fetch = FetchType.EAGER)

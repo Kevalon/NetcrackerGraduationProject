@@ -1,6 +1,7 @@
 package com.netcracker.application.controller;
 
 import com.netcracker.application.controller.form.SearchForm;
+import com.netcracker.application.service.ProductService;
 import com.netcracker.application.service.SearchService;
 import com.netcracker.application.service.model.entity.Product;
 import com.netcracker.application.service.model.parser.JsonParser;
@@ -20,10 +21,12 @@ import java.util.Map;
 @RequestMapping("/catalogue/search")
 public class SearchProductController {
     private final SearchService searchService;
+    private final ProductService productService;
 
     @Autowired
-    public SearchProductController(SearchService searchService) {
+    public SearchProductController(SearchService searchService, ProductService productService) {
         this.searchService = searchService;
+        this.productService = productService;
     }
 
     @GetMapping
@@ -41,8 +44,7 @@ public class SearchProductController {
         if (resultOfSearch.size() == 0) {
             model.addAttribute("nothing", true);
         } else {
-            Map<BigInteger, String> jsonMap = JsonParser.parseToMap(resultOfSearch);
-            model.addAttribute("jsonMap", jsonMap);
+            model.addAttribute("products", productService.getListOfProductDisplayForm(resultOfSearch));
             return "search/after";
         }
         return "search/after";

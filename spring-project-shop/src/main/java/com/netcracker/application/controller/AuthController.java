@@ -62,7 +62,7 @@ public class AuthController {
         userService.signupUser(user);
         model.addAttribute("successfulRegistration", true);
 
-        return "redirect:/login";
+        return "auth/login";
     }
 
     @GetMapping("/profile")

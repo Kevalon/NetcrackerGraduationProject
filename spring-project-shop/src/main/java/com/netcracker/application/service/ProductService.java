@@ -1,5 +1,6 @@
 package com.netcracker.application.service;
 
+import com.netcracker.application.controller.form.ProductDisplayForm;
 import com.netcracker.application.service.model.entity.Maker;
 import com.netcracker.application.service.model.entity.Order;
 import com.netcracker.application.service.model.entity.Product;
@@ -69,5 +70,25 @@ public class ProductService {
         product.setAmountInShop(product.getAmountInShop() - 1);
         productRepository.save(product);
         products.clear();
+    }
+
+    public ProductDisplayForm convertProductToProductDisplayForm(Product product) {
+        ProductDisplayForm productDisplayForm = new ProductDisplayForm();
+        productDisplayForm.setName(product.getName());
+        productDisplayForm.setProductId(product.getId());
+        productDisplayForm.setAmount(product.getAmountInShop());
+        productDisplayForm.setCategories(product.getCategories());
+        productDisplayForm.setDescription(product.getDescription());
+        productDisplayForm.setMakerName(makerService.getById(product.getMakerId()).getName());
+        productDisplayForm.setPriceWithDiscount(product.getPrice()
+                * Optional.ofNullable(product.getDiscount()).orElse(1.0));
+
+        return productDisplayForm;
+    }
+
+    public List<ProductDisplayForm> getListOfProductDisplayForm(List<Product> products) {
+        return products.stream()
+                .map(this::convertProductToProductDisplayForm)
+                .collect(Collectors.toList());
     }
 }
