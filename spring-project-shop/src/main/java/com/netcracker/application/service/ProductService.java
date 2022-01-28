@@ -2,7 +2,6 @@ package com.netcracker.application.service;
 
 import com.netcracker.application.controller.form.ProductDisplayForm;
 import com.netcracker.application.service.model.entity.Maker;
-import com.netcracker.application.service.model.entity.Order;
 import com.netcracker.application.service.model.entity.Product;
 import com.netcracker.application.service.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +16,16 @@ public class ProductService {
     private final Map<BigInteger, Product> products = new HashMap<>();
     private final ProductRepository productRepository;
     private final MakerService makerService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, MakerService makerService) {
+    public ProductService(
+            ProductRepository productRepository,
+            MakerService makerService,
+            CategoryService categoryService) {
         this.productRepository = productRepository;
         this.makerService = makerService;
+        this.categoryService = categoryService;
     }
 
     private void fill() {
@@ -54,10 +58,14 @@ public class ProductService {
     }
 
     public void deleteProduct(BigInteger id) {
-        Maker maker = makerService.getById(products.get(id).getMakerId());
+        Product product = getById(id);
+
+        Maker maker = makerService.getById(product.getMakerId());
         maker.setProductsAmount(maker.getProductsAmount() - 1);
         makerService.update(maker);
-        Product product = getById(id);
+
+        categoryService.decreaseByOne(product.getCategories());
+
         product.setIsDeleted(true);
         productRepository.save(product);
         products.clear();

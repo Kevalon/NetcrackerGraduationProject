@@ -21,8 +21,11 @@
                 <input class="btn btn-success btn-block" type="submit" value="Delete Category"/>
             </p>
         </form>
+        <div th:if="${error}">
+            <p>Failed to delete category. Check if this category still contains products in the shop</p>
+        </div>
         <div>
-            <a href="/management/maker">
+            <a href="/management/category">
                 <button>Go back</button>
             </a>
         </div>

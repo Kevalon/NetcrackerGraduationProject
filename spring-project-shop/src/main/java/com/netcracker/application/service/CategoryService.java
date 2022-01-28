@@ -6,19 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class CategoryService {
     private final Map<BigInteger, Category> categories = new HashMap<>();
     private final CategoryRepository categoryRepository;
+    private final ProductService productService;
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, ProductService productService) {
         this.categoryRepository = categoryRepository;
+        this.productService = productService;
     }
 
     private void fill() {
@@ -47,5 +46,18 @@ public class CategoryService {
     public void delete(BigInteger id) {
         categoryRepository.delete(categories.get(id));
         categories.remove(id);
+    }
+
+    public boolean isStillInUse(BigInteger id) {
+        return productService.getAll()
+                .stream()
+                .filter(p -> !p.getIsDeleted())
+                .anyMatch(p -> p.getCategories()
+                        .stream()
+                        .anyMatch(c -> c.getId().equals(id)));
+    }
+
+    public void decreaseByOne(Set<Category> categories) {
+        categories.forEach(c -> c.setProductsAmount(c.getProductsAmount() - 1));
     }
 }

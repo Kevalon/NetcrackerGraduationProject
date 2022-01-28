@@ -81,7 +81,7 @@ public class ShopManagementController {
 
     @GetMapping("maker/{id}/delete")
     public String deleteMaker(@PathVariable BigInteger id, ModelMap model) {
-        if (productService.getAll().stream().anyMatch(p -> p.getMakerId().equals(id))) {
+        if (productService.getAll().stream().filter(p -> !p.getIsDeleted()).anyMatch(p -> p.getMakerId().equals(id))) {
             model.addAttribute("error", true);
             model.addAttribute("makerId", id);
             return getMaker(id, model);
@@ -129,7 +129,13 @@ public class ShopManagementController {
     }
 
     @GetMapping("category/{id}/delete")
-    public String deleteCategory(@PathVariable BigInteger id) {
+    public String deleteCategory(@PathVariable BigInteger id, ModelMap model) {
+        if (categoryService.isStillInUse(id)) {
+            model.addAttribute("error", true);
+            model.addAttribute("categoryId", id);
+            return getCategory(id, model);
+        }
+
         categoryService.delete(id);
         return "redirect:/management/category";
     }
