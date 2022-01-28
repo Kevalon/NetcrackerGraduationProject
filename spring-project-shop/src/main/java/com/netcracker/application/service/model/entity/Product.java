@@ -31,6 +31,8 @@ public class Product implements MappableEntity {
     private Double discount;
     @Column(name = "maker_id", nullable = false)
     private BigInteger makerId;
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

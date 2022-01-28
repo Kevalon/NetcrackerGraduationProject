@@ -37,10 +37,6 @@ public class ProductService {
         return new ArrayList<>(products.values());
     }
 
-    public List<Product> getAllForOneOrder(Order order) {
-        return getAll().stream().filter(p -> p.getId().equals(order.getId())).collect(Collectors.toList());
-    }
-
     public Product getById(BigInteger id) {
         fill();
         return products.get(id);
@@ -58,11 +54,13 @@ public class ProductService {
     }
 
     public void deleteProduct(BigInteger id) {
-        productRepository.delete(products.get(id));
         Maker maker = makerService.getById(products.get(id).getMakerId());
         maker.setProductsAmount(maker.getProductsAmount() - 1);
         makerService.update(maker);
-        products.remove(id);
+        Product product = getById(id);
+        product.setIsDeleted(true);
+        productRepository.save(product);
+        products.clear();
     }
 
     public void buyOne(BigInteger productId) {
@@ -88,6 +86,7 @@ public class ProductService {
 
     public List<ProductDisplayForm> getListOfProductDisplayForm(List<Product> products) {
         return products.stream()
+                .filter(p -> !p.getIsDeleted())
                 .map(this::convertProductToProductDisplayForm)
                 .collect(Collectors.toList());
     }
