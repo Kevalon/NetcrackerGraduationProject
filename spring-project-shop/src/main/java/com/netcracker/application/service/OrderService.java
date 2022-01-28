@@ -1,7 +1,6 @@
 package com.netcracker.application.service;
 
 import com.netcracker.application.controller.form.OrderDisplayForm;
-import com.netcracker.application.controller.form.ProductDisplayForm;
 import com.netcracker.application.controller.form.ProfileEditForm;
 import com.netcracker.application.service.model.entity.Order;
 import com.netcracker.application.service.model.entity.Product;
@@ -26,7 +25,11 @@ public class OrderService {
     private final UserServiceImpl userService;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, CartService cartService, ProductService productService, UserServiceImpl userService) {
+    public OrderService(
+            OrderRepository orderRepository,
+            CartService cartService,
+            ProductService productService,
+            UserServiceImpl userService) {
         this.orderRepository = orderRepository;
         this.cartService = cartService;
         this.productService = productService;
@@ -52,6 +55,7 @@ public class OrderService {
         order.setAddress(profileEditForm.getAddress());
         order.setPhoneNumber(profileEditForm.getPhoneNumber());
         order.setName(profileEditForm.getFirstName() + " " + profileEditForm.getLastName());
+        order.setProducts(new HashSet<>(user.getCart()));
         add(order);
 
         user.setCart(new ArrayList<>());
@@ -105,7 +109,8 @@ public class OrderService {
 
     public void add(Order order) {
         orderRepository.save(order);
-        Map<Product, Long> productsToRemove = productService.getAllForOneOrder(order)
+
+        Map<Product, Long> productsToRemove = order.getProducts()
                 .stream()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         for (Map.Entry<Product, Long> entry : productsToRemove.entrySet()) {
