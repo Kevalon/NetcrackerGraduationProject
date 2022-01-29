@@ -8,4 +8,5 @@ import java.math.BigInteger;
 
 @Repository
 public interface MakerRepository extends JpaRepository<Maker, BigInteger> {
+    Maker findByName(String name);
 }

@@ -8,4 +8,5 @@ import java.math.BigInteger;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, BigInteger> {
+    Category findByName(String name);
 }

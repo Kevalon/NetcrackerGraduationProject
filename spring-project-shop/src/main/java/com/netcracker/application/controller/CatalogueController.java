@@ -1,12 +1,12 @@
 package com.netcracker.application.controller;
 
+import com.netcracker.application.controller.form.ProductAddForm;
 import com.netcracker.application.controller.form.ProductDisplayForm;
 import com.netcracker.application.service.CartService;
 import com.netcracker.application.service.ProductService;
 import com.netcracker.application.service.UserServiceImpl;
 import com.netcracker.application.service.model.entity.Product;
 import com.netcracker.application.service.model.entity.User;
-import com.netcracker.application.service.model.parser.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -74,15 +74,24 @@ public class CatalogueController {
     @GetMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
     public String addProduct(ModelMap model) {
-        model.addAttribute("product", new Product());
+        ProductAddForm form = new ProductAddForm();
+        form.setAmountInShop(0);
+        form.setPrice(0.0);
+        model.addAttribute("product", form);
         return "catalogue/add";
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public String addProduct(Product product) {
-        product.setIsDeleted(false);
-        productService.addProduct(product);
+    public String addProduct(ProductAddForm form, ModelMap model) {
+        try {
+            productService.addProductFromForm(form);
+        } catch (IllegalArgumentException exception) {
+            model.addAttribute("error", true);
+            model.addAttribute("product", form);
+            return "catalogue/add";
+        }
+
         return "redirect:/catalogue";
     }
 
@@ -90,7 +99,7 @@ public class CatalogueController {
     @PreAuthorize("hasRole('ADMIN')")
     public String edit(@PathVariable BigInteger id, ModelMap modelMap) {
         Product product = productService.getById(id);
-        modelMap.addAttribute("product", product);
+        modelMap.addAttribute("product", productService.getAddForm(product));
         return "catalogue/add";
     }
 

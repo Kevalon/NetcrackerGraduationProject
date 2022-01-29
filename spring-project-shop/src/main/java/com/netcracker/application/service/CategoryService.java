@@ -1,6 +1,7 @@
 package com.netcracker.application.service;
 
 import com.netcracker.application.service.model.entity.Category;
+import com.netcracker.application.service.model.entity.Maker;
 import com.netcracker.application.service.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,12 +13,10 @@ import java.util.*;
 public class CategoryService {
     private final Map<BigInteger, Category> categories = new HashMap<>();
     private final CategoryRepository categoryRepository;
-    private final ProductService productService;
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository, ProductService productService) {
+    public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-        this.productService = productService;
     }
 
     private void fill() {
@@ -38,26 +37,24 @@ public class CategoryService {
         return categories.get(id);
     }
 
+    public Category findByName(String name) {
+        return categoryRepository.findByName(name);
+    }
+
     public void add(Category category) {
         categoryRepository.save(category);
+        categories.clear();
+    }
+
+    public void update(Category category) {
+        Category categoryForUpdate = categories.get(category.getId());
+        categoryForUpdate.setProductsAmount(category.getProductsAmount());
+        categoryRepository.save(categoryForUpdate);
         categories.clear();
     }
 
     public void delete(BigInteger id) {
         categoryRepository.delete(categories.get(id));
         categories.remove(id);
-    }
-
-    public boolean isStillInUse(BigInteger id) {
-        return productService.getAll()
-                .stream()
-                .filter(p -> !p.getIsDeleted())
-                .anyMatch(p -> p.getCategories()
-                        .stream()
-                        .anyMatch(c -> c.getId().equals(id)));
-    }
-
-    public void decreaseByOne(Set<Category> categories) {
-        categories.forEach(c -> c.setProductsAmount(c.getProductsAmount() - 1));
     }
 }

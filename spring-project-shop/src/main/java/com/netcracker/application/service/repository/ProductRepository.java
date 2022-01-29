@@ -8,4 +8,5 @@ import java.math.BigInteger;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, BigInteger> {
+    Product findByName(String name);
 }

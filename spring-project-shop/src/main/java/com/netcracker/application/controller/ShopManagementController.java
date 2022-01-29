@@ -130,7 +130,7 @@ public class ShopManagementController {
 
     @GetMapping("category/{id}/delete")
     public String deleteCategory(@PathVariable BigInteger id, ModelMap model) {
-        if (categoryService.isStillInUse(id)) {
+        if (productService.categoryIsStillInUse(id)) {
             model.addAttribute("error", true);
             model.addAttribute("categoryId", id);
             return getCategory(id, model);
