@@ -1,14 +1,15 @@
 package com.netcracker.application.controller;
 
-import com.netcracker.application.service.CategoryService;
-import com.netcracker.application.service.MakerService;
-import com.netcracker.application.service.ProductService;
+import com.netcracker.application.service.*;
 import com.netcracker.application.service.model.entity.Category;
 import com.netcracker.application.service.model.entity.Maker;
+import com.netcracker.application.service.model.entity.Order;
+import com.netcracker.application.service.model.entity.User;
 import com.netcracker.application.service.model.parser.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,15 +27,21 @@ public class ShopManagementController {
     private final MakerService makerService;
     private final CategoryService categoryService;
     private final ProductService productService;
+    private final UserServiceImpl userService;
+    private final OrderService orderService;
 
     @Autowired
     public ShopManagementController(
             MakerService makerService,
             CategoryService categoryService,
-            ProductService productService) {
+            ProductService productService,
+            UserServiceImpl userService,
+            OrderService orderService) {
         this.makerService = makerService;
         this.categoryService = categoryService;
         this.productService = productService;
+        this.userService = userService;
+        this.orderService = orderService;
     }
 
     @GetMapping
@@ -138,5 +145,21 @@ public class ShopManagementController {
 
         categoryService.delete(id);
         return "redirect:/management/category";
+    }
+
+    @GetMapping("user")
+    public String displayUsers(Model model) {
+        model.addAttribute("users", userService.getUserDisplayForms(userService.getAll()));
+        return "management/user/list";
+    }
+
+    @GetMapping("user/{userId}")
+    public String displayUserOrders(@PathVariable BigInteger userId, Model model) {
+        User user = userService.getById(userId);
+        List<Order> userOrders = orderService.getAllOrdersForOneUser(user);
+        model.addAttribute("title", user.getUsername());
+        model.addAttribute("orders", orderService.getListOfOrderDisplayForm(userOrders));
+        model.addAttribute("nothing", userOrders.size() < 1);
+        return "order/customer";
     }
 }

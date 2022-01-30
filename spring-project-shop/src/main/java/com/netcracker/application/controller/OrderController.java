@@ -8,13 +8,13 @@ import com.netcracker.application.service.UserServiceImpl;
 import com.netcracker.application.service.model.entity.Order;
 import com.netcracker.application.service.model.entity.Product;
 import com.netcracker.application.service.model.entity.User;
-import com.netcracker.application.service.model.parser.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -84,7 +84,7 @@ public class OrderController {
 
     @GetMapping("/customer")
     public String showCustomerOrders(Model model) {
-        List<Order> orders = orderService.getAllForOneUser(userService.getCurrentUser());
+        List<Order> orders = orderService.getAllOrdersForOneUser(userService.getCurrentUser());
         model.addAttribute("nothing", orders.size() < 1);
         model.addAttribute("orders", orderService.getListOfOrderDisplayForm(orders));
         return "order/customer";
@@ -98,9 +98,11 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public String showProductsInOrder(@PathVariable BigInteger orderId, Model model) {
+    public String showProductsInOrder(@PathVariable BigInteger orderId, Model model, HttpServletRequest request) {
+        String referer = request.getHeader("referer");
         List<Product> products = orderService.getProductsForOneOrder(orderId);
         model.addAttribute("products", productService.getListOfProductDisplayForm(products));
+        model.addAttribute("referer", referer);
         return "order/one";
     }
 }

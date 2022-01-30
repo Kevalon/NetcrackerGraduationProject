@@ -1,6 +1,7 @@
 package com.netcracker.application.service;
 
 import com.netcracker.application.controller.form.ProfileEditForm;
+import com.netcracker.application.controller.form.UserDisplayForm;
 import com.netcracker.application.controller.form.UserRegistrationForm;
 import com.netcracker.application.security.UserService;
 import com.netcracker.application.service.model.entity.Role;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("userDetailsService")
 public class UserServiceImpl implements UserService {
@@ -126,6 +128,19 @@ public class UserServiceImpl implements UserService {
             return "Account with this email already exists";
         }
         return "";
+    }
+
+    public UserDisplayForm getUserDisplayForm(User user) {
+        UserDisplayForm form = new UserDisplayForm();
+        form.setUserId(user.getId());
+        form.setUsername(user.getUsername());
+        form.setEmail(user.getEmail());
+        form.setRoleName(user.getRole().getName());
+        return form;
+    }
+
+    public List<UserDisplayForm> getUserDisplayForms(List<User> users) {
+        return users.stream().map(this::getUserDisplayForm).collect(Collectors.toList());
     }
 
     public void updateUser(User user) {

@@ -94,7 +94,7 @@ public class OrderService {
         return new ArrayList<>(orders.values());
     }
 
-    public List<Order> getAllForOneUser(User user) {
+    public List<Order> getAllOrdersForOneUser(User user) {
         return getAll().stream().filter(o -> o.getUserId().equals(user.getId())).collect(Collectors.toList());
     }
 

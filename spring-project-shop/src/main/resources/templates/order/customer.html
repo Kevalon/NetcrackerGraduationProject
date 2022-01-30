@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="en">
 <head>
-    <title>Your Orders</title>
+    <title sec:authorize="hasRole('ADMIN')" th:text="${title}"></title>
+    <title sec:authorize="hasRole('CUSTOMER')">Your Orders</title>
 </head>
 <body>
 <h2>Previous Orders</h2>
 <div th:if="${nothing}">
-    <h4>You haven't ordered anything yet.</h4>
+    <h4 sec:authorize="hasRole('CUSTOMER')">You haven't ordered anything yet.</h4>
+    <h4 sec:authorize="hasRole('ADMIN')">This user hasn't ordered anything yet.</h4>
 </div>
-<table>
+<table th:if="${!nothing}">
     <thead>
     <tr>
         <th>Order Id</th>
@@ -34,9 +37,14 @@
     </tr>
     </tbody>
 </table>
-<div>
+<div sec:authorize="hasRole('CUSTOMER')">
     <a href="/profile">
         <button>Back to Profile</button>
+    </a>
+</div>
+<div sec:authorize="hasRole('ADMIN')">
+    <a href="/management/user">
+        <button>Back to Users</button>
     </a>
 </div>
 </body>
