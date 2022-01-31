@@ -8,22 +8,30 @@
         <h3>New Maker</h3>
     </div>
     <form th:action="@{/management/maker/add}" th:object="${maker}" method="POST">
-        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{id}"/>
 
         <div class="form-group">
             <label for="name">Maker Name</label>
-            <input type="text" class="form-control" id="name" th:field="*{name}" />
+            <input type="text" class="form-control" id="name" th:field="*{name}"/>
         </div>
         <div class="form-group">
             <label for="description">Maker Description</label>
-            <input type="text" class="form-control" id="description" th:field="*{description}" />
+            <input type="text" class="form-control" id="description" th:field="*{description}"/>
         </div>
         <div class="form-group">
             <label for="productsAmount">Amount in shop</label>
-            <input type="text" class="form-control" id="productsAmount" th:field="*{productsAmount}" />
+            <input type="text" class="form-control" id="productsAmount" th:field="*{productsAmount}"/>
         </div>
         <button type="submit" class="btn btn-default">Save</button>
     </form>
+</div>
+<div th:if="${error}">
+    <p>Some error occurred, while adding new Maker. Check the input data.</p>
+</div>
+<div>
+    <a href="/management/maker">
+        <button>Back to All Makers</button>
+    </a>
 </div>
 </body>
 </html>

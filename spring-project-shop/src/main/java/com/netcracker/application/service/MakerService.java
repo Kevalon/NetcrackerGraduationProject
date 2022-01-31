@@ -5,11 +5,9 @@ import com.netcracker.application.service.repository.MakerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.management.InstanceAlreadyExistsException;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class MakerService {
@@ -39,7 +37,12 @@ public class MakerService {
         return makers.get(id);
     }
 
-    public void add(Maker maker) {
+    public void add(Maker maker) throws InstanceAlreadyExistsException {
+        if (Objects.isNull(maker.getId())) {
+            if (Objects.nonNull(makerRepository.findByName(maker.getName()))) {
+                throw new InstanceAlreadyExistsException();
+            }
+        }
         makerRepository.save(maker);
         makers.clear();
     }

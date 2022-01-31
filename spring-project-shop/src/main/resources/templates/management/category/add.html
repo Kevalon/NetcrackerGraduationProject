@@ -25,5 +25,13 @@
         <button type="submit" class="btn btn-default">Save</button>
     </form>
 </div>
+<div th:if="${error}">
+    <p>Some error occurred, while adding new Category. Check the input data.</p>
+</div>
+<div>
+    <a href="/management/category">
+        <button>Back to All Categories</button>
+    </a>
+</div>
 </body>
 </html>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.management.InstanceAlreadyExistsException;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
@@ -74,8 +75,15 @@ public class ShopManagementController {
     }
 
     @PostMapping("maker/add")
-    public String addMaker(Maker maker) {
-        makerService.add(maker);
+    public String addMaker(Maker maker, ModelMap modelMap) {
+        try {
+            makerService.add(maker);
+        } catch (InstanceAlreadyExistsException e) {
+            modelMap.addAttribute("maker", maker);
+            modelMap.addAttribute("error", true);
+            return "management/maker/add";
+        }
+
         return "redirect:/management/maker";
     }
 
@@ -123,9 +131,15 @@ public class ShopManagementController {
     }
 
     @PostMapping("category/add")
-    public String addCategory(Category category) {
-        categoryService.add(category);
-        return "management/category/list";
+    public String addCategory(Category category, Model model) {
+        try {
+            categoryService.add(category);
+        } catch (InstanceAlreadyExistsException e) {
+            model.addAttribute("category", category);
+            model.addAttribute("error", true);
+            return "management/category/add";
+        }
+        return "redirect:/management/category";
     }
 
     @GetMapping("category/{id}/edit")

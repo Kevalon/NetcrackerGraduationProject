@@ -90,6 +90,9 @@ public class ProductService {
 
         Product product;
         if (Objects.isNull(form.getProductId())) {
+            if (!Objects.isNull(productRepository.findByName(form.getName()))) {
+                throw new IllegalArgumentException();
+            }
             product = new Product();
         } else product = getById(form.getProductId());
 

@@ -17,7 +17,7 @@ public class Category implements MappableEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private BigInteger id;
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", unique = true)
     private String name;
     @Column(name = "description")
     private String description;
