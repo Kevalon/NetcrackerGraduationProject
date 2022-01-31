@@ -24,7 +24,7 @@
     <tr th:each="product : ${products}">
         <td><a th:href="|@{/catalogue/}${product.productId}|" th:text="${product.name}"></a></td>
         <td><span th:text="${product.description}"></span></td>
-        <td><span th:text="${product.priceWithDiscount}"></span></td>
+        <td><span th:text="${#numbers.formatDecimal(product.priceWithDiscount, 0, 'COMMA', 2, 'POINT')}"></span></td>
         <td><span th:text="${product.amount}"></span></td>
         <td><span th:text="${product.makerName}"></span></td>
     </tr>

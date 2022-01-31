@@ -5,7 +5,6 @@ import com.netcracker.application.controller.form.ProductDisplayForm;
 import com.netcracker.application.service.model.entity.Category;
 import com.netcracker.application.service.model.entity.Maker;
 import com.netcracker.application.service.model.entity.Product;
-import com.netcracker.application.service.repository.CategoryRepository;
 import com.netcracker.application.service.repository.MakerRepository;
 import com.netcracker.application.service.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +75,11 @@ public class ProductService {
                         || form.getMakerName().equals("")
         ) {
             throw new IllegalArgumentException();
+        }
+        if (!Objects.isNull(form.getDiscount())) {
+            if (form.getDiscount() < 0.0 || form.getDiscount() >= 1.0) {
+                throw new IllegalArgumentException();
+            }
         }
         if (
                 Objects.isNull(categoryService.findByName(form.getCategoryName()))

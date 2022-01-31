@@ -37,7 +37,7 @@
             <p>Please fill in all the boxes.</p>
         </div>
 
-        <div th:text="${subTotal}"></div>
+        <div th:text="${#numbers.formatDecimal(subTotal, 0, 'COMMA', 2, 'POINT')}"></div>
 
         <input class="btn btn-success btn-block" type="submit" value="Order"/>
     </form>

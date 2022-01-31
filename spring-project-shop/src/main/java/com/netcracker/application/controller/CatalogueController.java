@@ -7,6 +7,7 @@ import com.netcracker.application.service.ProductService;
 import com.netcracker.application.service.UserServiceImpl;
 import com.netcracker.application.service.model.entity.Product;
 import com.netcracker.application.service.model.entity.User;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
