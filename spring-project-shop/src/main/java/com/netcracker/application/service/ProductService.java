@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -67,31 +68,31 @@ public class ProductService {
         products.clear();
     }
 
-    public void addProductFromForm(ProductAddForm form) {
+    public void addProductFromForm(ProductAddForm form) throws SQLException {
         if (
                 form.getName().equals("")
                         || form.getPrice() < 0.0
                         || form.getCategoryName().equals("")
                         || form.getMakerName().equals("")
         ) {
-            throw new IllegalArgumentException();
+            throw new SQLException();
         }
         if (!Objects.isNull(form.getDiscount())) {
             if (form.getDiscount() < 0.0 || form.getDiscount() >= 1.0) {
-                throw new IllegalArgumentException();
+                throw new SQLException();
             }
         }
         if (
                 Objects.isNull(categoryService.findByName(form.getCategoryName()))
                         || Objects.isNull(makerRepository.findByName(form.getMakerName()))
         ) {
-            throw new IllegalArgumentException();
+            throw new SQLException();
         }
 
         Product product;
         if (Objects.isNull(form.getProductId())) {
             if (!Objects.isNull(productRepository.findByName(form.getName()))) {
-                throw new IllegalArgumentException();
+                throw new SQLException();
             }
             product = new Product();
         } else product = getById(form.getProductId());

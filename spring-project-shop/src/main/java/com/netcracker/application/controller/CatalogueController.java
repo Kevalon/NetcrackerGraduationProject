@@ -7,7 +7,6 @@ import com.netcracker.application.service.ProductService;
 import com.netcracker.application.service.UserServiceImpl;
 import com.netcracker.application.service.model.entity.Product;
 import com.netcracker.application.service.model.entity.User;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +87,7 @@ public class CatalogueController {
     public String addProduct(ProductAddForm form, ModelMap model) {
         try {
             productService.addProductFromForm(form);
-        } catch (IllegalArgumentException exception) {
+        } catch (SQLException exception) {
             model.addAttribute("error", true);
             model.addAttribute("product", form);
             return "catalogue/add";

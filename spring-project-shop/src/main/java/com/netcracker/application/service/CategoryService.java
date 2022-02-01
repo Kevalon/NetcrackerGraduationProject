@@ -6,6 +6,7 @@ import com.netcracker.application.service.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.management.InstanceAlreadyExistsException;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -41,7 +42,12 @@ public class CategoryService {
         return categoryRepository.findByName(name);
     }
 
-    public void add(Category category) {
+    public void add(Category category) throws InstanceAlreadyExistsException {
+        if (Objects.isNull(category.getId())) {
+            if (Objects.nonNull(categoryRepository.findByName(category.getName()))) {
+                throw new InstanceAlreadyExistsException();
+            }
+        }
         categoryRepository.save(category);
         categories.clear();
     }
