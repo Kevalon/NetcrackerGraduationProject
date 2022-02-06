@@ -37,7 +37,7 @@
 </table>
 <div th:if="${!nothing}">
     <h3>Products information</h3>
-    <div th:text="${#numbers.formatDecimal(totalSum, 0, 'COMMA', 2, 'POINT')}">
+    <div th:text="${totalSum}">
         <span style="white-space: pre-line"></span>
     </div>
     <div th:text="${amountOfProducts}">

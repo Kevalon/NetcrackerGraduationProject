@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Controller
@@ -41,7 +43,11 @@ public class CartController {
             model.addAttribute(
                     "amountOfProducts",
                     "Amount of Products in the cart: " + cart.size());
-            model.addAttribute("totalSum", "Subtotal: " + cartService.getTotalCost(cart));
+            DecimalFormat formatter = new DecimalFormat("#.##");
+            formatter.setRoundingMode(RoundingMode.DOWN);
+            model.addAttribute(
+                    "totalSum",
+                    "Subtotal: " + formatter.format(cartService.getTotalCost(cart)));
         }
         return "catalogue/cart";
     }

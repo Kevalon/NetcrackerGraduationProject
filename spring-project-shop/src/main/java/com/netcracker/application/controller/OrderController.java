@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Controller
@@ -52,9 +54,11 @@ public class OrderController {
             model.addAttribute(
                     "profileInfoForm",
                     userService.getProfileEditForm(userService.getCurrentUser()));
+            DecimalFormat formatter = new DecimalFormat("#.##");
+            formatter.setRoundingMode(RoundingMode.DOWN);
             model.addAttribute(
                     "subTotal",
-                    "Subtotal: " + cartService.getTotalCost(user.getCart()));
+                    "Subtotal: " + formatter.format(cartService.getTotalCost(user.getCart())));
         }
         return "order/confirm";
     }
