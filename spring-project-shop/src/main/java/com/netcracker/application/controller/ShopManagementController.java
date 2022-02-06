@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.management.InstanceAlreadyExistsException;
 import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -78,9 +79,10 @@ public class ShopManagementController {
     public String addMaker(Maker maker, ModelMap modelMap) {
         try {
             makerService.add(maker);
-        } catch (InstanceAlreadyExistsException e) {
+        } catch (SQLException e) {
             modelMap.addAttribute("maker", maker);
             modelMap.addAttribute("error", true);
+            modelMap.addAttribute("errorMessage", e.getMessage());
             return "management/maker/add";
         }
 
@@ -134,9 +136,10 @@ public class ShopManagementController {
     public String addCategory(Category category, Model model) {
         try {
             categoryService.add(category);
-        } catch (InstanceAlreadyExistsException e) {
+        } catch (SQLException e) {
             model.addAttribute("category", category);
             model.addAttribute("error", true);
+            model.addAttribute("errorMessage", e.getMessage());
             return "management/category/add";
         }
         return "redirect:/management/category";

@@ -26,7 +26,7 @@
     </form>
 </div>
 <div th:if="${error}">
-    <p>Some error occurred, while adding new Category. Check the input data.</p>
+    <p th:text="${errorMessage}"></p>
 </div>
 <div>
     <a href="/management/category">

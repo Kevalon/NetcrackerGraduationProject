@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.management.InstanceAlreadyExistsException;
 import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.*;
 
 @Component
@@ -42,11 +43,17 @@ public class CategoryService {
         return categoryRepository.findByName(name);
     }
 
-    public void add(Category category) throws InstanceAlreadyExistsException {
+    public void add(Category category) throws SQLException {
         if (Objects.isNull(category.getId())) {
             if (Objects.nonNull(categoryRepository.findByName(category.getName()))) {
-                throw new InstanceAlreadyExistsException();
+                throw new SQLException("Category with that name already exists");
             }
+        }
+        if (category.getName().equals("")) {
+            throw new SQLException("Name must be provided");
+        }
+        if (category.getProductsAmount() < 0) {
+            throw new SQLException("Products amount can not be < 0");
         }
         categoryRepository.save(category);
         categories.clear();

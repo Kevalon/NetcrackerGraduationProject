@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.management.InstanceAlreadyExistsException;
 import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.*;
 
 @Component
@@ -37,11 +38,17 @@ public class MakerService {
         return makers.get(id);
     }
 
-    public void add(Maker maker) throws InstanceAlreadyExistsException {
+    public void add(Maker maker) throws SQLException {
         if (Objects.isNull(maker.getId())) {
             if (Objects.nonNull(makerRepository.findByName(maker.getName()))) {
-                throw new InstanceAlreadyExistsException();
+                throw new SQLException("Maker with that name already exists");
             }
+        }
+        if (maker.getName().equals("")) {
+            throw new SQLException("Maker name must be provided");
+        }
+        if (maker.getProductsAmount() < 0) {
+            throw new SQLException("Products amount can not be < 0");
         }
         makerRepository.save(maker);
         makers.clear();
