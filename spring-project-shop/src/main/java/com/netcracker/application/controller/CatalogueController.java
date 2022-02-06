@@ -9,6 +9,8 @@ import com.netcracker.application.service.model.entity.Product;
 import com.netcracker.application.service.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +46,6 @@ public class CatalogueController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public String getProduct(@PathVariable BigInteger id, ModelMap model) {
         Product product = productService.getById(id);
         model.addAttribute(
