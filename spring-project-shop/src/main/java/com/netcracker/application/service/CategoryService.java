@@ -53,6 +53,7 @@ public class CategoryService {
     }
 
     public void update(Category category) {
+        fill();
         Category categoryForUpdate = categories.get(category.getId());
         categoryForUpdate.setProductsAmount(category.getProductsAmount());
         categoryRepository.save(categoryForUpdate);
@@ -62,5 +63,10 @@ public class CategoryService {
     public void delete(BigInteger id) {
         categoryRepository.delete(categories.get(id));
         categories.remove(id);
+    }
+
+    public void deleteOneProduct(Category category) {
+        category.setProductsAmount(category.getProductsAmount() - 1);
+        update(category);
     }
 }

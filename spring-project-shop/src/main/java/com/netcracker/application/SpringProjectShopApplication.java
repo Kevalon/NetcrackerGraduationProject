@@ -10,7 +10,6 @@ public class SpringProjectShopApplication {
 		SpringApplication.run(SpringProjectShopApplication.class, args);
 	}
 
-	// Убрать указание товара в магазине, где это не нужно
 	// Выводить какая именно ошибка при добавлении
 	// Сделать табличка у админа
 }

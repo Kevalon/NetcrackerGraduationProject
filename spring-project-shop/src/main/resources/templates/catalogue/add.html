@@ -41,7 +41,7 @@
         <button type="submit" class="btn btn-default">Save</button>
     </form>
     <div th:if="${error}">
-        <p>Some error occurred, while adding new Product. Check the input data.</p>
+        <p th:text="${errorMessage}"></p>
     </div>
     <div>
         <a href="/catalogue">

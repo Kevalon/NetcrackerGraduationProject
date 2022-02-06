@@ -90,6 +90,7 @@ public class CatalogueController {
             productService.addProductFromForm(form);
         } catch (SQLException exception) {
             model.addAttribute("error", true);
+            model.addAttribute("errorMessage", exception.getMessage());
             model.addAttribute("product", form);
             return "catalogue/add";
         }

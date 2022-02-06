@@ -69,32 +69,39 @@ public class ProductService {
     }
 
     public void addProductFromForm(ProductAddForm form) throws SQLException {
-        if (
-                form.getName().equals("")
-                        || form.getPrice() < 0.0
-                        || form.getCategoryName().equals("")
-                        || form.getMakerName().equals("")
-        ) {
-            throw new SQLException();
+        if (form.getName().equals("")) {
+            throw new SQLException("Name must be presented");
+        }
+        if (form.getPrice() <= 0.0) {
+            throw new SQLException("Price can not be negative");
+        }
+        if (form.getCategoryName().equals("")) {
+            throw new SQLException("Category must be specified");
+        }
+        if (form.getMakerName().equals("")) {
+            throw new SQLException("Maker must be specified");
         }
         if (!Objects.isNull(form.getDiscount())) {
             if (form.getDiscount() < 0.0 || form.getDiscount() >= 1.0) {
-                throw new SQLException();
+                throw new SQLException("Discount should be between 0.0 and 1.0");
             }
         }
-        if (
-                Objects.isNull(categoryService.findByName(form.getCategoryName()))
-                        || Objects.isNull(makerRepository.findByName(form.getMakerName()))
-        ) {
-            throw new SQLException();
+        if (Objects.isNull(categoryService.findByName(form.getCategoryName()))) {
+            throw new SQLException("Specified category doesn't exist");
+        }
+        if (Objects.isNull(makerRepository.findByName(form.getMakerName()))) {
+            throw new SQLException("Specified maker doesn't exist");
         }
 
         Product product;
         if (Objects.isNull(form.getProductId())) {
-            if (!Objects.isNull(productRepository.findByName(form.getName()))) {
-                throw new SQLException();
-            }
-            product = new Product();
+            product = productRepository.findByName(form.getName());
+            if (!Objects.isNull(product)) {
+                if (product.getIsDeleted()) {
+                    throw new SQLException("Product with such name already exists in the database, " +
+                            "but is currently deleted");
+                } else throw new SQLException("Product with such name already exists");
+            } else product = new Product();
         } else product = getById(form.getProductId());
 
         product.setIsDeleted(false);
@@ -117,7 +124,7 @@ public class ProductService {
         maker.setProductsAmount(maker.getProductsAmount() - 1);
         makerService.update(maker);
 
-        product.getCategories().forEach(c -> c.setProductsAmount(c.getProductsAmount() - 1));
+        product.getCategories().forEach(categoryService::deleteOneProduct);
 
         product.setIsDeleted(true);
         productRepository.save(product);
@@ -140,7 +147,7 @@ public class ProductService {
         productDisplayForm.setDescription(product.getDescription());
         productDisplayForm.setMakerName(makerService.getById(product.getMakerId()).getName());
         productDisplayForm.setPriceWithDiscount(product.getPrice()
-                * Optional.ofNullable(product.getDiscount()).orElse(1.0));
+                * (1.0 - Optional.ofNullable(product.getDiscount()).orElse(0.0)));
 
         return productDisplayForm;
     }
