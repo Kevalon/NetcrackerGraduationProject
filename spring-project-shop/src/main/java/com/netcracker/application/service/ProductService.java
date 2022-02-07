@@ -38,7 +38,8 @@ public class ProductService {
     private void fill() {
         if (products.isEmpty()) {
             for (Product product : productRepository.findAll()) {
-                products.put(product.getId(), product);
+                if (!product.getIsDeleted())
+                    products.put(product.getId(), product);
             }
         }
     }

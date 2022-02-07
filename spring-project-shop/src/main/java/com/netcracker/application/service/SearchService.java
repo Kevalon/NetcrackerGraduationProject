@@ -21,7 +21,9 @@ public class SearchService {
     }
 
     public List<Product> getResult(SearchForm searchForm) {
-        Stream<Product> resultStream = productService.getAll().stream();
+        //Stream<Product> resultStream = productService.getAll().stream();
+        List<Product> list = productService.getAll();
+        Stream<Product> resultStream = list.stream();
 
         if (!searchForm.getCategoryName().equals("")) {
             resultStream = resultStream

@@ -41,6 +41,7 @@ public class SearchProductController {
         if (resultOfSearch.size() == 0) {
             model.addAttribute("nothing", true);
         } else {
+            model.addAttribute("nothing", false);
             model.addAttribute("products", productService.getListOfProductDisplayForm(resultOfSearch));
             return "search/after";
         }
