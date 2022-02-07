@@ -6,10 +6,25 @@
     <title th:text="${title}"></title>
 </head>
 <body>
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Products amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="category : ${categories}">
+        <td><span th:text="${category.id}"></span></td>
+        <td><span th:text="${category.name}"></span></td>
+        <td><span th:text="${category.description}"></span></td>
+        <td><span th:text="${category.productsAmount}"></span></td>
+    </tr>
+    </tbody>
+</table>
 <div>
-    <p th:text="${json}">
-        <span style="white-space: pre-line"></span>
-    </p>
     <div>
         <form th:action="|@{/management/category/}${categoryId}/edit|" method="GET">
             <p>

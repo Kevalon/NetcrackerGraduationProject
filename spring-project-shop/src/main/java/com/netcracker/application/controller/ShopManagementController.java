@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.management.InstanceAlreadyExistsException;
 import java.math.BigInteger;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,16 +55,17 @@ public class ShopManagementController {
     @GetMapping("/maker")
     public String makers(ModelMap model) {
         List<Maker> makers = makerService.getAll();
-        Map<BigInteger, String> jsonMap = JsonParser.parseToMap(makers);
-        model.addAttribute("jsonMap", jsonMap);
+        //Map<BigInteger, String> jsonMap = JsonParser.parseToMap(makers);
+        model.addAttribute("makers", makers);
         return "management/maker/list";
     }
 
     @GetMapping("maker/{id}")
     public String getMaker(@PathVariable BigInteger id, ModelMap model) {
         Maker maker = makerService.getById(id);
-        String json = JsonParser.parse(maker);
-        model.addAttribute("json", json);
+        model.addAttribute("makers", new ArrayList<Maker>() {{
+            add(maker);
+        }});
         model.addAttribute("title", maker.getName());
         model.addAttribute("makerId", id);
         return "management/maker/one";
@@ -111,16 +113,16 @@ public class ShopManagementController {
     @GetMapping("/category")
     public String categories(ModelMap model) {
         List<Category> categories = categoryService.getAll();
-        Map<BigInteger, String> jsonMap = JsonParser.parseToMap(categories);
-        model.addAttribute("jsonMap", jsonMap);
+        model.addAttribute("categories", categories);
         return "management/category/list";
     }
 
     @GetMapping("category/{id}")
     public String getCategory(@PathVariable BigInteger id, ModelMap model) {
         Category category = categoryService.getById(id);
-        String json = JsonParser.parse(category);
-        model.addAttribute("json", json);
+        model.addAttribute("categories", new ArrayList<Category>() {{
+            add(category);
+        }});
         model.addAttribute("title", category.getName());
         model.addAttribute("categoryId", id);
         return "management/category/one";

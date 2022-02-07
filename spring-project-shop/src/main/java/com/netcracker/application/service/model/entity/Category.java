@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigInteger;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,4 +24,11 @@ public class Category implements MappableEntity {
     private String description;
     @Column(name = "products_amount", nullable = false)
     private int productsAmount;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "product_and_category",
+            joinColumns = {@JoinColumn(name = "product_id")},
+            inverseJoinColumns = {@JoinColumn(name = "category_id")})
+    private List<Product> products;
 }

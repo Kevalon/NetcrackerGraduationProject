@@ -35,7 +35,7 @@ public class CartService {
     public double getTotalCost(List<Product> cart) {
         return cart
                 .stream()
-                .map(p -> p.getPrice() * Optional.ofNullable(p.getDiscount()).orElse(1.0))
+                .map(p -> p.getPrice() * (1.0 - Optional.ofNullable(p.getDiscount()).orElse(0.0)))
                 .reduce(0.0, Double::sum);
     }
 

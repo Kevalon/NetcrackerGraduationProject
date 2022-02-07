@@ -29,7 +29,7 @@ public class Product implements MappableEntity {
     private Double price;
     @Column(name = "discount")
     private Double discount;
-    @Column(name = "maker_id", nullable = false)
+    @Column(name = "maker_id")
     private BigInteger makerId;
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;

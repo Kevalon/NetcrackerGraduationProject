@@ -124,8 +124,11 @@ public class ProductService {
         maker.setProductsAmount(maker.getProductsAmount() - 1);
         makerService.update(maker);
 
+        product.getCategories().forEach(c -> c.getProducts().remove(product));
         product.getCategories().forEach(categoryService::deleteOneProduct);
 
+        product.setCategories(null);
+        product.setMakerId(null);
         product.setIsDeleted(true);
         productRepository.save(product);
         products.clear();

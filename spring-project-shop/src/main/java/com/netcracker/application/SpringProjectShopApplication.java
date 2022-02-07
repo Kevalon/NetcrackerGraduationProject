@@ -9,7 +9,4 @@ public class SpringProjectShopApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringProjectShopApplication.class, args);
 	}
-
-	// Выводить какая именно ошибка при добавлении
-	// Сделать табличка у админа
 }

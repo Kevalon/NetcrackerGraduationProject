@@ -6,10 +6,25 @@
     <title th:text="${title}"></title>
 </head>
 <body>
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Products amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="maker : ${makers}">
+        <td><span th:text="${maker.id}"></span></td>
+        <td><span th:text="${maker.name}"></span></td>
+        <td><span th:text="${maker.description}"></span></td>
+        <td><span th:text="${maker.productsAmount}"></span></td>
+    </tr>
+    </tbody>
+</table>
 <div>
-    <p th:text="${json}">
-        <span style="white-space: pre-line"></span>
-    </p>
     <div>
         <form th:action="|@{/management/maker/}${makerId}/edit|" method="GET">
             <p>
