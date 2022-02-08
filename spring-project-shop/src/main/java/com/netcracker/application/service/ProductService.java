@@ -82,6 +82,9 @@ public class ProductService {
         if (form.getMakerName().equals("")) {
             throw new SQLException("Maker must be specified");
         }
+        if (form.getAmountInShop() < 0) {
+            throw new SQLException("There can't be less than 0 products in the shop");
+        }
         if (!Objects.isNull(form.getDiscount())) {
             if (form.getDiscount() < 0.0 || form.getDiscount() >= 1.0) {
                 throw new SQLException("Discount should be between 0.0 and 1.0");
